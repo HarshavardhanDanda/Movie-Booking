@@ -5,7 +5,7 @@ import { useForm } from 'react-hook-form'
 import { toast } from 'react-toastify'
 import 'react-toastify/dist/ReactToastify.css'
 import Loading from './Loading'
-const CinemaLists = ({
+const TheatreLists = ({
 	cinemas,
 	selectedCinemaIndex,
 	setSelectedCinemaIndex,
@@ -34,7 +34,7 @@ const CinemaLists = ({
 			// console.log(response.data)
 			reset()
 			fetchCinemas(data.name)
-			toast.success('Add cinema successful!', {
+			toast.success('Add theatre successful!', {
 				position: 'top-center',
 				autoClose: 2000,
 				pauseOnHover: false
@@ -51,7 +51,7 @@ const CinemaLists = ({
 		}
 	}
 
-	const CinemaLists = ({ cinemas }) => {
+	const TheatreLists = ({ cinemas }) => {
 		const cinemasList = cinemas?.filter((cinema) =>
 			cinema.name.toLowerCase().includes(watch('search')?.toLowerCase() || '')
 		)
@@ -83,7 +83,7 @@ const CinemaLists = ({
 				)
 			})
 		) : (
-			<div>No cinemas found</div>
+			<div>No theatres found</div>
 		)
 	}
 
@@ -94,11 +94,11 @@ const CinemaLists = ({
 					className="flex flex-wrap items-center justify-between gap-x-4 gap-y-2"
 					onSubmit={handleSubmit(onAddCinema)}
 				>
-					<h2 className="text-3xl font-bold">Cinema Lists</h2>
+					<h2 className="text-3xl font-bold">Theatre Lists</h2>
 					{auth.role === 'admin' && (
 						<div className="flex w-fit grow sm:justify-end">
 							<input
-								placeholder="Type a cinema name"
+								placeholder="Type a theatre name"
 								className="w-full grow rounded-l border border-gray-300 px-3 py-1 sm:max-w-xs"
 								required
 								{...register('name', { required: true })}
@@ -119,7 +119,7 @@ const CinemaLists = ({
 					<input
 						type="search"
 						className="block w-full rounded-lg border border-gray-300 p-2 pl-10 text-gray-900"
-						placeholder="Search cinema"
+						placeholder="Search theatre"
 						{...register('search')}
 					/>
 				</div>
@@ -127,7 +127,7 @@ const CinemaLists = ({
 					<Loading />
 				) : (
 					<div className="flex flex-wrap items-center gap-3">
-						<CinemaLists cinemas={cinemas} />
+						<TheatreLists cinemas={cinemas} />
 					</div>
 				)}
 			</div>
@@ -135,4 +135,4 @@ const CinemaLists = ({
 	)
 }
 
-export default CinemaLists
+export default TheatreLists

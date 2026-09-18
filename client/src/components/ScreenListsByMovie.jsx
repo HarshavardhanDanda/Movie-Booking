@@ -1,12 +1,12 @@
 import axios from 'axios'
 import { useEffect, useState } from 'react'
 import 'react-toastify/dist/ReactToastify.css'
-import CinemaLists from './CinemaLists'
+import TheatreLists from './TheatreLists'
 import DateSelector from './DateSelector'
 import Loading from './Loading'
-import TheaterShort from './TheaterShort'
+import ScreenShort from './ScreenShort'
 
-const TheaterListsByMovie = ({ movies, selectedMovieIndex, setSelectedMovieIndex, auth }) => {
+const ScreenListsByMovie = ({ movies, selectedMovieIndex, setSelectedMovieIndex, auth }) => {
 	const [selectedDate, setSelectedDate] = useState(
 		(sessionStorage.getItem('selectedDate') && new Date(sessionStorage.getItem('selectedDate'))) || new Date()
 	)
@@ -101,7 +101,7 @@ const TheaterListsByMovie = ({ movies, selectedMovieIndex, setSelectedMovieIndex
 
 	return (
 		<>
-			<CinemaLists {...props} />
+			<TheatreLists {...props} />
 			<div className="mx-4 h-fit rounded-md bg-gradient-to-br from-indigo-200 to-blue-100 text-gray-900 drop-shadow-md sm:mx-8">
 				<div className="flex flex-col gap-6 p-4 sm:p-6">
 					<DateSelector selectedDate={selectedDate} setSelectedDate={setSelectedDate} />
@@ -135,7 +135,7 @@ const TheaterListsByMovie = ({ movies, selectedMovieIndex, setSelectedMovieIndex
 												<h2>{theater.cinema.name}</h2>
 											</div>
 										)}
-										<TheaterShort
+										<ScreenShort
 											theaterId={theater._id}
 											movies={movies}
 											selectedDate={selectedDate}
@@ -164,4 +164,4 @@ const TheaterListsByMovie = ({ movies, selectedMovieIndex, setSelectedMovieIndex
 	)
 }
 
-export default TheaterListsByMovie
+export default ScreenListsByMovie

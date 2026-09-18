@@ -63,7 +63,7 @@ const Navbar = () => {
 						}`}
 					>
 						<HomeModernIcon className="h-6 w-6" />
-						<p>Cinema</p>
+						<p>Theatre</p>
 					</Link>
 					<Link
 						to={'/schedule'}
@@ -154,7 +154,7 @@ const Navbar = () => {
 			<div className="flex w-full flex-row justify-between lg:w-fit">
 				<button className="flex flex-row items-center gap-2" onClick={() => navigate('/')}>
 					<FilmIcon className="h-8 w-8 text-white" />
-					<h1 className="mr-2 text-xl text-white">Cinema</h1>
+					<h1 className="mr-2 text-xl text-white">Movie Booking</h1>
 				</button>
 				<button
 					className="flex h-8 w-8 items-center justify-center rounded hover:bg-gray-700 lg:hidden"

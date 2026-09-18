@@ -11,9 +11,9 @@ import { useForm } from 'react-hook-form'
 import { toast } from 'react-toastify'
 import 'react-toastify/dist/ReactToastify.css'
 import DateSelector from './DateSelector'
-import Theater from './Theater'
+import Screen from './Screen'
 
-const TheaterListsByCinema = ({ cinemas, selectedCinemaIndex, setSelectedCinemaIndex, fetchCinemas, auth }) => {
+const ScreenListsByTheatre = ({ cinemas, selectedCinemaIndex, setSelectedCinemaIndex, fetchCinemas, auth }) => {
 	const {
 		register,
 		handleSubmit,
@@ -57,7 +57,7 @@ const TheaterListsByCinema = ({ cinemas, selectedCinemaIndex, setSelectedCinemaI
 
 	const handleDelete = (cinema) => {
 		const confirmed = window.confirm(
-			`Do you want to delete cinema ${cinema.name}, including its theaters, showtimes and tickets?`
+			`Do you want to delete theatre ${cinema.name}, including its screens, showtimes and tickets?`
 		)
 		if (confirmed) {
 			onDeleteCinema(cinema._id)
@@ -75,7 +75,7 @@ const TheaterListsByCinema = ({ cinemas, selectedCinemaIndex, setSelectedCinemaI
 			// console.log(response.data)
 			setSelectedCinemaIndex(null)
 			fetchCinemas()
-			toast.success('Delete cinema successful!', {
+			toast.success('Delete theatre successful!', {
 				position: 'top-center',
 				autoClose: 2000,
 				pauseOnHover: false
@@ -111,7 +111,7 @@ const TheaterListsByCinema = ({ cinemas, selectedCinemaIndex, setSelectedCinemaI
 			)
 			fetchCinemas()
 			// console.log(response.data)
-			toast.success('Add theater successful!', {
+			toast.success('Add screen successful!', {
 				position: 'top-center',
 				autoClose: 2000,
 				pauseOnHover: false
@@ -130,7 +130,7 @@ const TheaterListsByCinema = ({ cinemas, selectedCinemaIndex, setSelectedCinemaI
 
 	const handleDecreaseTheater = (cinema) => {
 		const confirmed = window.confirm(
-			`Do you want to delete theater ${cinemas[selectedCinemaIndex].theaters.length}, including its showtimes and tickets?`
+			`Do you want to delete screen ${cinemas[selectedCinemaIndex].theaters.length}, including its showtimes and tickets?`
 		)
 		if (confirmed) {
 			onDecreaseTheater()
@@ -147,7 +147,7 @@ const TheaterListsByCinema = ({ cinemas, selectedCinemaIndex, setSelectedCinemaI
 			})
 			// console.log(response.data)
 			fetchCinemas()
-			toast.success('Decrease theater successful!', {
+			toast.success('Decrease screen successful!', {
 				position: 'top-center',
 				autoClose: 2000,
 				pauseOnHover: false
@@ -179,7 +179,7 @@ const TheaterListsByCinema = ({ cinemas, selectedCinemaIndex, setSelectedCinemaI
 			)
 			// console.log(response.data)
 			fetchCinemas(data.name)
-			toast.success('Edit cinema name successful!', {
+			toast.success('Edit theatre name successful!', {
 				position: 'top-center',
 				autoClose: 2000,
 				pauseOnHover: false
@@ -199,7 +199,7 @@ const TheaterListsByCinema = ({ cinemas, selectedCinemaIndex, setSelectedCinemaI
 			<div className="flex items-center justify-center gap-2 rounded-t-md bg-gradient-to-br from-gray-900 to-gray-800 px-2 py-1.5 text-center text-2xl font-semibold text-white sm:py-2">
 				{isEditing ? (
 					<input
-						title="Cinema name"
+						title="Theatre name"
 						type="text"
 						required
 						autoFocus
@@ -216,7 +216,7 @@ const TheaterListsByCinema = ({ cinemas, selectedCinemaIndex, setSelectedCinemaI
 						{isEditing ? (
 							<form onClick={handleSubmitName(onEditCinema)}>
 								<button
-									title="Save cinema name"
+									title="Save theatre name"
 									className="flex w-fit items-center gap-1 rounded-md bg-gradient-to-r from-indigo-600 to-blue-500  py-1 pl-2 pr-1.5 text-sm font-medium text-white hover:from-indigo-500 hover:to-blue-400"
 									onClick={() => {
 										SetIsEditing(false)
@@ -228,7 +228,7 @@ const TheaterListsByCinema = ({ cinemas, selectedCinemaIndex, setSelectedCinemaI
 							</form>
 						) : (
 							<button
-								title="Edit cinema name"
+								title="Edit theatre name"
 								className="flex w-fit items-center gap-1 rounded-md bg-gradient-to-r from-indigo-600 to-blue-500  py-1 pl-2 pr-1.5 text-sm font-medium text-white hover:from-indigo-500 hover:to-blue-400"
 								onClick={() => SetIsEditing(true)}
 							>
@@ -237,7 +237,7 @@ const TheaterListsByCinema = ({ cinemas, selectedCinemaIndex, setSelectedCinemaI
 							</button>
 						)}
 						<button
-							title="Delete cinema"
+							title="Delete theatre"
 							disabled={isDeleting}
 							className="flex w-fit items-center gap-1 rounded-md bg-gradient-to-r from-red-700 to-rose-600 py-1 pl-2 pr-1.5 text-sm font-medium text-white hover:from-red-600 hover:to-rose-600 disabled:from-slate-500 disabled:to-slate-400"
 							onClick={() => handleDelete(cinemas[selectedCinemaIndex])}
@@ -257,10 +257,10 @@ const TheaterListsByCinema = ({ cinemas, selectedCinemaIndex, setSelectedCinemaI
 			<div className="flex flex-col gap-6 p-4 sm:p-6 overflow-y-auto">
 				<DateSelector selectedDate={selectedDate} setSelectedDate={setSelectedDate} />
 				<form className="flex flex-col gap-4" onSubmit={handleSubmit(onIncreaseTheater)}>
-					<h2 className="text-3xl font-bold">Theaters</h2>
+					<h2 className="text-3xl font-bold">Screens</h2>
 					{auth.role === 'admin' && (
 						<div className="flex w-full flex-wrap justify-between gap-4 rounded-md bg-gradient-to-br from-indigo-100 to-white p-4">
-							<h3 className="flex items-center text-xl font-bold">Add Theater</h3>
+							<h3 className="flex items-center text-xl font-bold">Add Screen</h3>
 							<div className="flex grow flex-col gap-4 sm:justify-end md:flex-row">
 								<div className="flex flex-wrap justify-end gap-4">
 									<div className="flex flex-wrap gap-2">
@@ -313,7 +313,7 @@ const TheaterListsByCinema = ({ cinemas, selectedCinemaIndex, setSelectedCinemaI
 										</label>
 									</div>
 									<button
-										title="Add theater"
+										title="Add screen"
 										disabled={isIncreasing}
 										className="flex grow items-center justify-center whitespace-nowrap rounded-r bg-gradient-to-r from-indigo-600 to-blue-500 px-2 py-1 font-medium text-white drop-shadow-md hover:from-indigo-500 hover:to-blue-400 disabled:from-slate-500 disabled:to-slate-400 md:grow-0"
 										type="submit"
@@ -327,7 +327,7 @@ const TheaterListsByCinema = ({ cinemas, selectedCinemaIndex, setSelectedCinemaI
 				</form>
 				{cinemas[selectedCinemaIndex].theaters.map((theater, index) => {
 					return (
-						<Theater
+						<Screen
 							key={index}
 							theaterId={theater._id}
 							movies={movies}
@@ -339,12 +339,12 @@ const TheaterListsByCinema = ({ cinemas, selectedCinemaIndex, setSelectedCinemaI
 				{auth.role === 'admin' && cinemas[selectedCinemaIndex].theaters.length > 0 && (
 					<div className="flex justify-center">
 						<button
-							title="Delete last theater"
+							title="Delete last screen"
 							className="w-fit rounded-md bg-gradient-to-r from-red-700 to-rose-600 px-2 py-1 font-medium text-white drop-shadow-md hover:from-red-600 hover:to-rose-500 disabled:from-slate-500 disabled:to-slate-400"
 							onClick={() => handleDecreaseTheater()}
 							disabled={isDecreasing}
 						>
-							{isDecreasing ? 'Processing...' : 'DELETE LAST THEATER -'}
+							{isDecreasing ? 'Processing...' : 'DELETE LAST SCREEN'}
 						</button>
 					</div>
 				)}
@@ -353,4 +353,4 @@ const TheaterListsByCinema = ({ cinemas, selectedCinemaIndex, setSelectedCinemaI
 	)
 }
 
-export default TheaterListsByCinema
+export default ScreenListsByTheatre

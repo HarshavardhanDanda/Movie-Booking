@@ -8,7 +8,7 @@ import { AuthContext } from '../context/AuthContext'
 import Loading from './Loading'
 import Showtimes from './Showtimes'
 
-const Theater = ({ theaterId, movies, selectedDate, filterMovie, setSelectedDate }) => {
+const Screen = ({ theaterId, movies, selectedDate, filterMovie, setSelectedDate }) => {
 	const {
 		register,
 		handleSubmit,
@@ -345,4 +345,4 @@ const Theater = ({ theaterId, movies, selectedDate, filterMovie, setSelectedDate
 		</div>
 	)
 }
-export default Theater
+export default Screen

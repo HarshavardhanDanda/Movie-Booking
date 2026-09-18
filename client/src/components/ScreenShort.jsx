@@ -5,7 +5,7 @@ import { AuthContext } from '../context/AuthContext'
 import Loading from './Loading'
 import Showtimes from './Showtimes'
 
-const TheaterShort = ({ theaterId, movies, selectedDate, filterMovie, rounded = false }) => {
+const ScreenShort = ({ theaterId, movies, selectedDate, filterMovie, rounded = false }) => {
 	const { auth } = useContext(AuthContext)
 	const [theater, setTheater] = useState({})
 	const [isFetchingTheaterDone, setIsFetchingTheaterDone] = useState(false)
@@ -61,7 +61,7 @@ const TheaterShort = ({ theaterId, movies, selectedDate, filterMovie, rounded = 
 						rounded && 'sm:rounded-bl-md'
 					}`}
 				>
-					<p className="text-sm">Theater</p>
+					<p className="text-sm">Screen</p>
 					<p className="text-3xl leading-8">{theater.number}</p>
 				</div>
 				{auth.role === 'admin' && (
@@ -104,4 +104,4 @@ const TheaterShort = ({ theaterId, movies, selectedDate, filterMovie, rounded = 
 		</div>
 	)
 }
-export default TheaterShort
+export default ScreenShort

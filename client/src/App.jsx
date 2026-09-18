@@ -2,7 +2,7 @@ import axios from 'axios'
 import { Route, Routes } from 'react-router'
 import { ToastContainer } from 'react-toastify'
 import AdminRoute from './AdminRoute'
-import Cinema from './pages/Cinema'
+import Theatre from './pages/Theatre'
 import Home from './pages/Home'
 import Login from './pages/Login'
 import Movie from './pages/Movie'
@@ -25,7 +25,7 @@ function App() {
 				<Route path="/" element={<Home />} />
 				<Route path="/login" element={<Login />} />
 				<Route path="/register" element={<Register />} />
-				<Route path="/cinema" element={<Cinema />} />
+				<Route path="/cinema" element={<Theatre />} />
 				<Route
 					path="/movie"
 					element={

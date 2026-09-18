@@ -1,12 +1,12 @@
 import axios from 'axios'
 import { useContext, useEffect, useState } from 'react'
 import 'react-toastify/dist/ReactToastify.css'
-import CinemaLists from '../components/CinemaLists'
+import TheatreLists from '../components/TheatreLists'
 import Navbar from '../components/Navbar'
-import TheaterListsByCinema from '../components/TheaterListsByCinema'
+import ScreenListsByTheatre from '../components/ScreenListsByTheatre'
 import { AuthContext } from '../context/AuthContext'
 
-const Cinema = () => {
+const Theatre = () => {
 	const { auth } = useContext(AuthContext)
 	const [selectedCinemaIndex, setSelectedCinemaIndex] = useState(
 		parseInt(sessionStorage.getItem('selectedCinemaIndex')) || 0
@@ -60,10 +60,10 @@ const Cinema = () => {
 	return (
 		<div className="flex min-h-screen flex-col gap-4 bg-gradient-to-br from-indigo-900 to-blue-500 pb-8 sm:gap-8">
 			<Navbar />
-			<CinemaLists {...props} />
-			{cinemas[selectedCinemaIndex]?.name && <TheaterListsByCinema {...props} />}
+			<TheatreLists {...props} />
+			{cinemas[selectedCinemaIndex]?.name && <ScreenListsByTheatre {...props} />}
 		</div>
 	)
 }
 
-export default Cinema
+export default Theatre

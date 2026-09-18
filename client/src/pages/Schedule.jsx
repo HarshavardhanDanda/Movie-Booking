@@ -4,7 +4,7 @@ import { useForm } from 'react-hook-form'
 import Select from 'react-tailwindcss-select'
 import { toast } from 'react-toastify'
 import 'react-toastify/dist/ReactToastify.css'
-import CinemaLists from '../components/CinemaLists'
+import TheatreLists from '../components/TheatreLists'
 import DateSelector from '../components/DateSelector'
 import Loading from '../components/Loading'
 import Navbar from '../components/Navbar'
@@ -165,7 +165,7 @@ const Schedule = () => {
 	return (
 		<div className="flex min-h-screen flex-col gap-4 bg-gradient-to-br from-indigo-900 to-blue-500 pb-8 text-gray-900 sm:gap-8">
 			<Navbar />
-			<CinemaLists {...props} />
+			<TheatreLists {...props} />
 			{selectedCinemaIndex !== null &&
 				(cinemas[selectedCinemaIndex]?.theaters?.length ? (
 					<div className="mx-4 flex flex-col gap-2 rounded-lg bg-gradient-to-br from-indigo-200 to-blue-100 p-4 drop-shadow-xl sm:mx-8 sm:gap-4 sm:p-6">
@@ -180,7 +180,7 @@ const Schedule = () => {
 									<div className="flex flex-col gap-2 rounded-lg lg:flex-row lg:items-stretch">
 										<div className="flex grow items-center gap-x-2 gap-y-1 lg:flex-col lg:items-start">
 											<label className="whitespace-nowrap text-lg font-semibold leading-5">
-												Theater:
+												Screen:
 											</label>
 											<select
 												className="h-9 w-full rounded bg-white px-2 py-1 font-semibold text-gray-900 drop-shadow-sm"
@@ -188,7 +188,7 @@ const Schedule = () => {
 												{...register('theater', { required: true })}
 											>
 												<option value="" defaultValue>
-													Choose a theater
+													Choose a screen
 												</option>
 												{cinemas[selectedCinemaIndex].theaters?.map((theater, index) => {
 													return (
@@ -341,7 +341,7 @@ const Schedule = () => {
 							<Loading />
 						) : (
 							<div>
-								<h2 className="text-2xl font-bold">Theaters</h2>
+								<h2 className="text-2xl font-bold">Screens</h2>
 								{cinemas[selectedCinemaIndex]?._id && (
 									<ScheduleTable
 										cinema={cinemas[selectedCinemaIndex]}
@@ -354,7 +354,7 @@ const Schedule = () => {
 					</div>
 				) : (
 					<div className="mx-4 flex flex-col gap-2 rounded-lg bg-gradient-to-br from-indigo-200 to-blue-100 p-4 drop-shadow-xl sm:mx-8 sm:gap-4 sm:p-6">
-						<p className="text-center">There are no theaters available</p>
+						<p className="text-center">There are no screens available</p>
 					</div>
 				))}
 		</div>

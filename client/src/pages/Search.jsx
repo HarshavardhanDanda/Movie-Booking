@@ -331,7 +331,7 @@ const Search = () => {
 					{isOpenFilter && (
 						<div className="">
 							<div className="flex flex-col">
-								<h4 className="pt-1 text-lg font-bold text-gray-800">Cinema :</h4>
+								<h4 className="pt-1 text-lg font-bold text-gray-800">Theatre :</h4>
 								<Select
 									value={filterCinema}
 									options={Array.from(
@@ -352,7 +352,7 @@ const Search = () => {
 								/>
 							</div>
 							<div className="flex flex-col">
-								<h4 className="pt-1 text-lg font-bold text-gray-800">Theater :</h4>
+								<h4 className="pt-1 text-lg font-bold text-gray-800">Screen :</h4>
 								<Select
 									value={filterTheater}
 									options={Array.from(new Set(showtimes.map((showtime) => showtime.theater.number)))
@@ -733,7 +733,7 @@ const Search = () => {
 							setSortCinema(prevValue === 0 ? 1 : prevValue === 1 ? -1 : 0)
 						}}
 					>
-						<p className="ml-auto">Cinema</p>
+						<p className="ml-auto">Theatre</p>
 						{sortCinema === 0 && <ChevronUpDownIcon className="ml-auto w-6 h-6" />}
 						{sortCinema === 1 && <ChevronUpIcon className="ml-auto w-6 h-6" />}
 						{sortCinema === -1 && <ChevronDownIcon className="ml-auto w-6 h-6" />}
@@ -746,7 +746,7 @@ const Search = () => {
 							setSortTheater(prevValue === 0 ? 1 : prevValue === 1 ? -1 : 0)
 						}}
 					>
-						<p className="ml-auto">Theater</p>
+						<p className="ml-auto">Screen</p>
 						{sortTheater === 0 && <ChevronUpDownIcon className="ml-auto w-6 h-6" />}
 						{sortTheater === 1 && <ChevronUpIcon className="ml-auto w-6 h-6" />}
 						{sortTheater === -1 && <ChevronDownIcon className="ml-auto w-6 h-6" />}
