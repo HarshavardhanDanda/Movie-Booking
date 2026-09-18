@@ -55,9 +55,9 @@ const Navbar = () => {
 			<>
 				<div className="flex flex-col gap-2 lg:flex-row">
 					<Link
-						to={'/cinema'}
+						to={'/theatre'}
 						className={`flex items-center justify-center gap-2 rounded-md px-2 py-1 text-white hover:bg-gray-500 ${
-							window.location.pathname === '/cinema'
+							window.location.pathname === '/theatre'
 								? 'bg-gradient-to-br from-indigo-800 to-blue-700'
 								: 'bg-gray-600'
 						}`}

@@ -64,7 +64,7 @@ const Showtime = () => {
 		fetchShowtime()
 	}, [])
 
-	const row = showtime?.theater?.seatPlan?.row
+	const row = showtime?.screen?.seatPlan?.row
 	let rowLetters = []
 	if (row) {
 		for (let k = 64; k <= (row.length === 2 ? row.charCodeAt(0) : 64); k++) {
@@ -79,7 +79,7 @@ const Showtime = () => {
 		}
 	}
 
-	const column = showtime?.theater?.seatPlan.column
+	const column = showtime?.screen?.seatPlan.column
 	let colNumber = []
 	for (let k = 1; k <= column; k++) {
 		colNumber.push(k)

@@ -13,7 +13,7 @@ import 'react-toastify/dist/ReactToastify.css'
 import DateSelector from './DateSelector'
 import Screen from './Screen'
 
-const ScreenListsByTheatre = ({ cinemas, selectedCinemaIndex, setSelectedCinemaIndex, fetchCinemas, auth }) => {
+const ScreenListsByTheatre = ({ theatres, selectedTheatreIndex, setSelectedTheatreIndex, fetchTheatres, auth }) => {
 	const {
 		register,
 		handleSubmit,
@@ -52,29 +52,29 @@ const ScreenListsByTheatre = ({ cinemas, selectedCinemaIndex, setSelectedCinemaI
 
 	useEffect(() => {
 		SetIsEditing(false)
-		setValueName('name', cinemas[selectedCinemaIndex].name)
-	}, [cinemas[selectedCinemaIndex].name])
+		setValueName('name', theatres[selectedTheatreIndex].name)
+	}, [theatres[selectedTheatreIndex].name])
 
-	const handleDelete = (cinema) => {
+	const handleDelete = (theatre) => {
 		const confirmed = window.confirm(
-			`Do you want to delete theatre ${cinema.name}, including its screens, showtimes and tickets?`
+			`Do you want to delete theatre ${theatre.name}, including its screens, showtimes and tickets?`
 		)
 		if (confirmed) {
-			onDeleteCinema(cinema._id)
+			onDeleteTheatre(theatre._id)
 		}
 	}
 
-	const onDeleteCinema = async (id) => {
+	const onDeleteTheatre = async (id) => {
 		try {
 			SetIsDeleting(true)
-			const response = await axios.delete(`/cinema/${id}`, {
+			const response = await axios.delete(`/theatre/${id}`, {
 				headers: {
 					Authorization: `Bearer ${auth.token}`
 				}
 			})
 			// console.log(response.data)
-			setSelectedCinemaIndex(null)
-			fetchCinemas()
+			setSelectedTheatreIndex(null)
+			fetchTheatres()
 			toast.success('Delete theatre successful!', {
 				position: 'top-center',
 				autoClose: 2000,
@@ -92,14 +92,14 @@ const ScreenListsByTheatre = ({ cinemas, selectedCinemaIndex, setSelectedCinemaI
 		}
 	}
 
-	const onIncreaseTheater = async (data) => {
+	const onIncreaseScreen = async (data) => {
 		try {
 			SetIsIncreaseing(true)
 			const response = await axios.post(
-				`/theater`,
+				`/screen`,
 				{
-					cinema: cinemas[selectedCinemaIndex]._id,
-					number: cinemas[selectedCinemaIndex].theaters.length + 1,
+					theatre: theatres[selectedTheatreIndex]._id,
+					number: theatres[selectedTheatreIndex].screens.length + 1,
 					row: data.row.toUpperCase(),
 					column: data.column
 				},
@@ -109,7 +109,7 @@ const ScreenListsByTheatre = ({ cinemas, selectedCinemaIndex, setSelectedCinemaI
 					}
 				}
 			)
-			fetchCinemas()
+			fetchTheatres()
 			// console.log(response.data)
 			toast.success('Add screen successful!', {
 				position: 'top-center',
@@ -128,25 +128,25 @@ const ScreenListsByTheatre = ({ cinemas, selectedCinemaIndex, setSelectedCinemaI
 		}
 	}
 
-	const handleDecreaseTheater = (cinema) => {
+	const handleDecreaseScreen = (theatre) => {
 		const confirmed = window.confirm(
-			`Do you want to delete screen ${cinemas[selectedCinemaIndex].theaters.length}, including its showtimes and tickets?`
+			`Do you want to delete screen ${theatres[selectedTheatreIndex].screens.length}, including its showtimes and tickets?`
 		)
 		if (confirmed) {
-			onDecreaseTheater()
+			onDecreaseScreen()
 		}
 	}
 
-	const onDecreaseTheater = async () => {
+	const onDecreaseScreen = async () => {
 		try {
 			SetIsDecreasing(true)
-			const response = await axios.delete(`/theater/${cinemas[selectedCinemaIndex].theaters.slice(-1)[0]._id}`, {
+			const response = await axios.delete(`/screen/${theatres[selectedTheatreIndex].screens.slice(-1)[0]._id}`, {
 				headers: {
 					Authorization: `Bearer ${auth.token}`
 				}
 			})
 			// console.log(response.data)
-			fetchCinemas()
+			fetchTheatres()
 			toast.success('Decrease screen successful!', {
 				position: 'top-center',
 				autoClose: 2000,
@@ -164,10 +164,10 @@ const ScreenListsByTheatre = ({ cinemas, selectedCinemaIndex, setSelectedCinemaI
 		}
 	}
 
-	const onEditCinema = async (data) => {
+	const onEditTheatre = async (data) => {
 		try {
 			const response = await axios.put(
-				`/cinema/${cinemas[selectedCinemaIndex]._id}`,
+				`/theatre/${theatres[selectedTheatreIndex]._id}`,
 				{
 					name: data.name
 				},
@@ -178,7 +178,7 @@ const ScreenListsByTheatre = ({ cinemas, selectedCinemaIndex, setSelectedCinemaI
 				}
 			)
 			// console.log(response.data)
-			fetchCinemas(data.name)
+			fetchTheatres(data.name)
 			toast.success('Edit theatre name successful!', {
 				position: 'top-center',
 				autoClose: 2000,
@@ -209,12 +209,12 @@ const ScreenListsByTheatre = ({ cinemas, selectedCinemaIndex, setSelectedCinemaI
 						{...registerName('name', { required: true })}
 					/>
 				) : (
-					<span className="flex-grow text-2xl sm:text-3xl">{cinemas[selectedCinemaIndex]?.name}</span>
+					<span className="flex-grow text-2xl sm:text-3xl">{theatres[selectedTheatreIndex]?.name}</span>
 				)}
 				{auth.role === 'admin' && (
 					<>
 						{isEditing ? (
-							<form onClick={handleSubmitName(onEditCinema)}>
+							<form onClick={handleSubmitName(onEditTheatre)}>
 								<button
 									title="Save theatre name"
 									className="flex w-fit items-center gap-1 rounded-md bg-gradient-to-r from-indigo-600 to-blue-500  py-1 pl-2 pr-1.5 text-sm font-medium text-white hover:from-indigo-500 hover:to-blue-400"
@@ -240,7 +240,7 @@ const ScreenListsByTheatre = ({ cinemas, selectedCinemaIndex, setSelectedCinemaI
 							title="Delete theatre"
 							disabled={isDeleting}
 							className="flex w-fit items-center gap-1 rounded-md bg-gradient-to-r from-red-700 to-rose-600 py-1 pl-2 pr-1.5 text-sm font-medium text-white hover:from-red-600 hover:to-rose-600 disabled:from-slate-500 disabled:to-slate-400"
-							onClick={() => handleDelete(cinemas[selectedCinemaIndex])}
+							onClick={() => handleDelete(theatres[selectedTheatreIndex])}
 						>
 							{isDeleting ? (
 								'Processing...'
@@ -256,7 +256,7 @@ const ScreenListsByTheatre = ({ cinemas, selectedCinemaIndex, setSelectedCinemaI
 			</div>
 			<div className="flex flex-col gap-6 p-4 sm:p-6 overflow-y-auto">
 				<DateSelector selectedDate={selectedDate} setSelectedDate={setSelectedDate} />
-				<form className="flex flex-col gap-4" onSubmit={handleSubmit(onIncreaseTheater)}>
+				<form className="flex flex-col gap-4" onSubmit={handleSubmit(onIncreaseScreen)}>
 					<h2 className="text-3xl font-bold">Screens</h2>
 					{auth.role === 'admin' && (
 						<div className="flex w-full flex-wrap justify-between gap-4 rounded-md bg-gradient-to-br from-indigo-100 to-white p-4">
@@ -309,7 +309,7 @@ const ScreenListsByTheatre = ({ cinemas, selectedCinemaIndex, setSelectedCinemaI
 									<div className="flex flex-col items-center justify-center gap-1 rounded-l bg-gradient-to-br from-gray-800 to-gray-700 p-1 text-white">
 										<label className="text-xs font-semibold leading-3">Number</label>
 										<label className="text-2xl font-semibold leading-5">
-											{cinemas[selectedCinemaIndex].theaters.length + 1}
+											{theatres[selectedTheatreIndex].screens.length + 1}
 										</label>
 									</div>
 									<button
@@ -325,23 +325,23 @@ const ScreenListsByTheatre = ({ cinemas, selectedCinemaIndex, setSelectedCinemaI
 						</div>
 					)}
 				</form>
-				{cinemas[selectedCinemaIndex].theaters.map((theater, index) => {
+				{theatres[selectedTheatreIndex].screens.map((screen, index) => {
 					return (
 						<Screen
 							key={index}
-							theaterId={theater._id}
+							screenId={screen._id}
 							movies={movies}
 							selectedDate={selectedDate}
 							setSelectedDate={setSelectedDate}
 						/>
 					)
 				})}
-				{auth.role === 'admin' && cinemas[selectedCinemaIndex].theaters.length > 0 && (
+				{auth.role === 'admin' && theatres[selectedTheatreIndex].screens.length > 0 && (
 					<div className="flex justify-center">
 						<button
 							title="Delete last screen"
 							className="w-fit rounded-md bg-gradient-to-r from-red-700 to-rose-600 px-2 py-1 font-medium text-white drop-shadow-md hover:from-red-600 hover:to-rose-500 disabled:from-slate-500 disabled:to-slate-400"
-							onClick={() => handleDecreaseTheater()}
+							onClick={() => handleDecreaseScreen()}
 							disabled={isDecreasing}
 						>
 							{isDecreasing ? 'Processing...' : 'DELETE LAST SCREEN'}

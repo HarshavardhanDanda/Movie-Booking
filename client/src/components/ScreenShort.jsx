@@ -5,36 +5,36 @@ import { AuthContext } from '../context/AuthContext'
 import Loading from './Loading'
 import Showtimes from './Showtimes'
 
-const ScreenShort = ({ theaterId, movies, selectedDate, filterMovie, rounded = false }) => {
+const ScreenShort = ({ screenId, movies, selectedDate, filterMovie, rounded = false }) => {
 	const { auth } = useContext(AuthContext)
-	const [theater, setTheater] = useState({})
-	const [isFetchingTheaterDone, setIsFetchingTheaterDone] = useState(false)
+	const [screen, setScreen] = useState({})
+	const [isFetchingScreenDone, setIsFetchingScreenDone] = useState(false)
 
-	const fetchTheater = async (data) => {
+	const fetchScreen = async (data) => {
 		try {
-			setIsFetchingTheaterDone(false)
+			setIsFetchingScreenDone(false)
 			let response
 			if (auth.role === 'admin') {
-				response = await axios.get(`/theater/unreleased/${theaterId}`, {
+				response = await axios.get(`/screen/unreleased/${screenId}`, {
 					headers: {
 						Authorization: `Bearer ${auth.token}`
 					}
 				})
 			} else {
-				response = await axios.get(`/theater/${theaterId}`)
+				response = await axios.get(`/screen/${screenId}`)
 			}
 			// console.log(response.data.data)
-			setTheater(response.data.data)
+			setScreen(response.data.data)
 		} catch (error) {
 			console.error(error)
 		} finally {
-			setIsFetchingTheaterDone(true)
+			setIsFetchingScreenDone(true)
 		}
 	}
 
 	useEffect(() => {
-		fetchTheater()
-	}, [theaterId])
+		fetchScreen()
+	}, [screenId])
 
 	function rowToNumber(column) {
 		let result = 0
@@ -45,7 +45,7 @@ const ScreenShort = ({ theaterId, movies, selectedDate, filterMovie, rounded = f
 		return result
 	}
 
-	if (!isFetchingTheaterDone) {
+	if (!isFetchingScreenDone) {
 		return <Loading />
 	}
 
@@ -62,7 +62,7 @@ const ScreenShort = ({ theaterId, movies, selectedDate, filterMovie, rounded = f
 					}`}
 				>
 					<p className="text-sm">Screen</p>
-					<p className="text-3xl leading-8">{theater.number}</p>
+					<p className="text-3xl leading-8">{screen.number}</p>
 				</div>
 				{auth.role === 'admin' && (
 					<div
@@ -70,23 +70,23 @@ const ScreenShort = ({ theaterId, movies, selectedDate, filterMovie, rounded = f
 					>
 						<div className="flex items-center gap-2">
 							<ArrowsUpDownIcon className="h-5 w-5" />
-							{theater?.seatPlan?.row === 'A' ? (
+							{screen?.seatPlan?.row === 'A' ? (
 								<h4>Row : A</h4>
 							) : (
-								<h4>Row : A - {theater?.seatPlan?.row}</h4>
+								<h4>Row : A - {screen?.seatPlan?.row}</h4>
 							)}
 						</div>
 						<div className="flex items-center gap-2">
 							<ArrowsRightLeftIcon className="h-5 w-5" />
-							{theater?.seatPlan?.column === 1 ? (
+							{screen?.seatPlan?.column === 1 ? (
 								<h4>Column : 1</h4>
 							) : (
-								<h4>Column : 1 - {theater?.seatPlan?.column}</h4>
+								<h4>Column : 1 - {screen?.seatPlan?.column}</h4>
 							)}
 						</div>
 						<div className="flex items-center gap-2">
 							<UserIcon className="h-5 w-5" />
-							{(rowToNumber(theater.seatPlan.row) * theater.seatPlan.column).toLocaleString('en-US')}{' '}
+							{(rowToNumber(screen.seatPlan.row) * screen.seatPlan.column).toLocaleString('en-US')}{' '}
 							Seats
 						</div>
 					</div>
@@ -94,7 +94,7 @@ const ScreenShort = ({ theaterId, movies, selectedDate, filterMovie, rounded = f
 			</div>
 			<div className="mx-4 flex items-center">
 				<Showtimes
-					showtimes={theater.showtimes}
+					showtimes={screen.showtimes}
 					movies={movies}
 					selectedDate={selectedDate}
 					filterMovie={filterMovie}

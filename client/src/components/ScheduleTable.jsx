@@ -4,7 +4,7 @@ import { useNavigate } from 'react-router-dom'
 import { useDraggable } from 'react-use-draggable-scroll'
 import { AuthContext } from '../context/AuthContext'
 
-const ScheduleTable = ({ cinema, selectedDate }) => {
+const ScheduleTable = ({ theatre, selectedDate }) => {
 	const ref = useRef(null)
 	const { auth } = useContext(AuthContext)
 	const { events } = useDraggable(ref)
@@ -26,8 +26,8 @@ const ScheduleTable = ({ cinema, selectedDate }) => {
 		let firstRowStart = 100000
 		let lastRowEnd = 0
 		let count = 0
-		cinema.theaters.forEach((theater, index) => {
-			theater.showtimes.forEach((showtime, index) => {
+		theatre.screens.forEach((screen, index) => {
+			screen.showtimes.forEach((showtime, index) => {
 				if (
 					new Date(showtime.showtime).getDate() === selectedDate.getDate() &&
 					new Date(showtime.showtime).getMonth() === selectedDate.getMonth() &&
@@ -47,8 +47,8 @@ const ScheduleTable = ({ cinema, selectedDate }) => {
 		return [firstRowStart, lastRowEnd, count]
 	}
 
-	const getTodayShowtimes = (theater) => {
-		return theater.showtimes?.filter((showtime, index) => {
+	const getTodayShowtimes = (screen) => {
+		return screen.showtimes?.filter((showtime, index) => {
 			return (
 				new Date(showtime.showtime).getDate() === selectedDate.getDate() &&
 				new Date(showtime.showtime).getMonth() === selectedDate.getMonth() &&
@@ -79,15 +79,15 @@ const ScheduleTable = ({ cinema, selectedDate }) => {
 	return (
 		<>
 			<div
-				className={`grid min-h-[50vh] max-h-screen overflow-x-auto grid-cols-${cinema.theaters?.length.toString()} grid-rows-${
+				className={`grid min-h-[50vh] max-h-screen overflow-x-auto grid-cols-${theatre.screens?.length.toString()} grid-rows-${
 					gridRows + shiftEnd
 				} rounded-md bg-gradient-to-br from-indigo-100 to-white`}
 				{...events}
 				ref={ref}
 			>
-				{cinema.theaters?.map((theater, index) => {
+				{theatre.screens?.map((screen, index) => {
 					{
-						return getTodayShowtimes(theater)?.map((showtime, index) => {
+						return getTodayShowtimes(screen)?.map((showtime, index) => {
 							return (
 								<button
 									title={`${showtime.movie.name}\n${new Date(showtime.showtime)
@@ -113,7 +113,7 @@ const ScheduleTable = ({ cinema, selectedDate }) => {
 										showtime.movie.length
 									)} row-start-${
 										getRowStart(showtime.showtime) - firstRowStart + shiftStart
-									} col-start-${theater.number} mx-1 rounded p-1 text-center drop-shadow-md ${
+									} col-start-${screen.number} mx-1 rounded p-1 text-center drop-shadow-md ${
 										!isPast(new Date(showtime.showtime))
 											? 'bg-white hover:bg-gray-100'
 											: `bg-gray-200  ${
@@ -161,7 +161,7 @@ const ScheduleTable = ({ cinema, selectedDate }) => {
 					</div>
 				)}
 
-				{cinema.theaters.map((theater, index) => (
+				{theatre.screens.map((screen, index) => (
 					<div
 						key={index}
 						className="sticky top-0 row-span-1 row-start-1 flex flex-col items-center justify-center bg-gradient-to-br from-gray-800 to-gray-700 py-1 text-white"
@@ -172,20 +172,20 @@ const ScheduleTable = ({ cinema, selectedDate }) => {
 								<div className="flex gap-1 text-xs">
 									<p className="flex items-center gap-1">
 										<ArrowsUpDownIcon className="h-3 w-3" />
-										{theater.seatPlan.row === 'A'
-											? theater.seatPlan.row
-											: `A - ${theater.seatPlan.row}`}
+										{screen.seatPlan.row === 'A'
+											? screen.seatPlan.row
+											: `A - ${screen.seatPlan.row}`}
 									</p>
 									<p className="flex items-center gap-1">
 										<ArrowsRightLeftIcon className="h-3 w-3" />
-										{theater.seatPlan.column === 1
-											? theater.seatPlan.column
-											: `1 - ${theater.seatPlan.column}`}
+										{screen.seatPlan.column === 1
+											? screen.seatPlan.column
+											: `1 - ${screen.seatPlan.column}`}
 									</p>
 								</div>
 								<p className="flex items-center gap-1 text-sm">
 									<UserIcon className="h-4 w-4" />
-									{(rowToNumber(theater.seatPlan.row) * theater.seatPlan.column).toLocaleString(
+									{(rowToNumber(screen.seatPlan.row) * screen.seatPlan.column).toLocaleString(
 										'en-US'
 									)}{' '}
 									Seats

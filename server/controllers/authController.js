@@ -96,9 +96,9 @@ exports.getTickets = async (req, res, next) => {
 			path: 'tickets.showtime',
 			populate: [
 				'movie',
-				{ path: 'theater', populate: { path: 'cinema', select: 'name' }, select: 'cinema number' }
+				{ path: 'screen', populate: { path: 'theatre', select: 'name' }, select: 'theatre number' }
 			],
-			select: 'theater movie showtime isRelease'
+			select: 'screen movie showtime isRelease'
 		})
 
 		res.status(200).json({
@@ -137,9 +137,9 @@ exports.getAll = async (req, res, next) => {
 			path: 'tickets.showtime',
 			populate: [
 				'movie',
-				{ path: 'theater', populate: { path: 'cinema', select: 'name' }, select: 'cinema number' }
+				{ path: 'screen', populate: { path: 'theatre', select: 'name' }, select: 'theatre number' }
 			],
-			select: 'theater movie showtime isRelease'
+			select: 'screen movie showtime isRelease'
 		})
 
 		res.status(200).json({

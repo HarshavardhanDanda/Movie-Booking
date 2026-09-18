@@ -29,7 +29,7 @@ const ShowtimeDetails = ({ showDeleteBtn, showtime, fetchShowtime }) => {
 				}
 			})
 			// console.log(response.data)
-			navigate('/cinema')
+			navigate('/theatre')
 			toast.success('Delete showtime successful!', {
 				position: 'top-center',
 				autoClose: 2000,
@@ -178,10 +178,10 @@ const ShowtimeDetails = ({ showDeleteBtn, showtime, fetchShowtime }) => {
 			<div className="flex justify-between">
 				<div className="flex flex-col justify-center rounded-tl-lg bg-gradient-to-br from-gray-800 to-gray-700 px-4 py-0.5 text-center font-bold text-white sm:px-8">
 					<p className="text-sm">Screen</p>
-					<p className="text-3xl">{showtime?.theater?.number}</p>
+					<p className="text-3xl">{showtime?.screen?.number}</p>
 				</div>
 				<div className="flex w-fit grow items-center justify-center rounded-tr-lg bg-gradient-to-br from-indigo-800 to-blue-700 px-4 py-0.5 text-center text-xl font-bold text-white sm:text-3xl">
-					<p className="mx-auto">{showtime?.theater?.cinema.name}</p>
+					<p className="mx-auto">{showtime?.screen?.theatre.name}</p>
 					{!showtime?.isRelease && <EyeSlashIcon className="h-8 w-8" title="Unreleased showtime" />}
 				</div>
 			</div>

@@ -28,7 +28,7 @@ const Purchase = () => {
 				}
 			)
 			// console.log(response.data)
-			navigate('/cinema')
+			navigate('/theatre')
 			toast.success('Purchase seats successful!', {
 				position: 'top-center',
 				autoClose: 2000,

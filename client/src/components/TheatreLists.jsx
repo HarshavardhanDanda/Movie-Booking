@@ -6,12 +6,12 @@ import { toast } from 'react-toastify'
 import 'react-toastify/dist/ReactToastify.css'
 import Loading from './Loading'
 const TheatreLists = ({
-	cinemas,
-	selectedCinemaIndex,
-	setSelectedCinemaIndex,
-	fetchCinemas,
+	theatres,
+	selectedTheatreIndex,
+	setSelectedTheatreIndex,
+	fetchTheatres,
 	auth,
-	isFetchingCinemas = false
+	isFetchingTheatres = false
 }) => {
 	const {
 		register,
@@ -23,17 +23,17 @@ const TheatreLists = ({
 
 	const [isAdding, SetIsAdding] = useState(false)
 
-	const onAddCinema = async (data) => {
+	const onAddTheatre = async (data) => {
 		try {
 			SetIsAdding(true)
-			const response = await axios.post('/cinema', data, {
+			const response = await axios.post('/theatre', data, {
 				headers: {
 					Authorization: `Bearer ${auth.token}`
 				}
 			})
 			// console.log(response.data)
 			reset()
-			fetchCinemas(data.name)
+			fetchTheatres(data.name)
 			toast.success('Add theatre successful!', {
 				position: 'top-center',
 				autoClose: 2000,
@@ -51,34 +51,34 @@ const TheatreLists = ({
 		}
 	}
 
-	const TheatreLists = ({ cinemas }) => {
-		const cinemasList = cinemas?.filter((cinema) =>
-			cinema.name.toLowerCase().includes(watch('search')?.toLowerCase() || '')
+	const TheatreLists = ({ theatres }) => {
+		const theatresList = theatres?.filter((theatre) =>
+			theatre.name.toLowerCase().includes(watch('search')?.toLowerCase() || '')
 		)
 
-		return cinemasList.length ? (
-			cinemasList.map((cinema, index) => {
-				return cinemas[selectedCinemaIndex]?._id === cinema._id ? (
+		return theatresList.length ? (
+			theatresList.map((theatre, index) => {
+				return theatres[selectedTheatreIndex]?._id === theatre._id ? (
 					<button
 						className="w-fit rounded-md bg-gradient-to-br from-indigo-800 to-blue-700 px-2.5 py-1.5 text-lg font-medium text-white drop-shadow-xl hover:from-indigo-700 hover:to-blue-600"
 						onClick={() => {
-							setSelectedCinemaIndex(null)
-							sessionStorage.setItem('selectedCinemaIndex', null)
+							setSelectedTheatreIndex(null)
+							sessionStorage.setItem('selectedTheatreIndex', null)
 						}}
 						key={index}
 					>
-						{cinema.name}
+						{theatre.name}
 					</button>
 				) : (
 					<button
 						className="w-fit rounded-md bg-gradient-to-br from-indigo-800 to-blue-700 px-2 py-1 font-medium text-white drop-shadow-md hover:from-indigo-700 hover:to-blue-600"
 						onClick={() => {
-							setSelectedCinemaIndex(index)
-							sessionStorage.setItem('selectedCinemaIndex', index)
+							setSelectedTheatreIndex(index)
+							sessionStorage.setItem('selectedTheatreIndex', index)
 						}}
 						key={index}
 					>
-						{cinema.name}
+						{theatre.name}
 					</button>
 				)
 			})
@@ -92,7 +92,7 @@ const TheatreLists = ({
 			<div className="mx-4 flex h-fit flex-col gap-4 rounded-md bg-gradient-to-br from-indigo-200 to-blue-100 p-4 text-gray-900 drop-shadow-xl sm:mx-8 sm:p-6">
 				<form
 					className="flex flex-wrap items-center justify-between gap-x-4 gap-y-2"
-					onSubmit={handleSubmit(onAddCinema)}
+					onSubmit={handleSubmit(onAddTheatre)}
 				>
 					<h2 className="text-3xl font-bold">Theatre Lists</h2>
 					{auth.role === 'admin' && (
@@ -123,11 +123,11 @@ const TheatreLists = ({
 						{...register('search')}
 					/>
 				</div>
-				{isFetchingCinemas ? (
+				{isFetchingTheatres ? (
 					<Loading />
 				) : (
 					<div className="flex flex-wrap items-center gap-3">
-						<TheatreLists cinemas={cinemas} />
+						<TheatreLists theatres={theatres} />
 					</div>
 				)}
 			</div>

@@ -8,60 +8,60 @@ import { AuthContext } from '../context/AuthContext'
 
 const Theatre = () => {
 	const { auth } = useContext(AuthContext)
-	const [selectedCinemaIndex, setSelectedCinemaIndex] = useState(
-		parseInt(sessionStorage.getItem('selectedCinemaIndex')) || 0
+	const [selectedTheatreIndex, setSelectedTheatreIndex] = useState(
+		parseInt(sessionStorage.getItem('selectedTheatreIndex')) || 0
 	)
-	const [cinemas, setCinemas] = useState([])
-	const [isFetchingCinemas, setIsFetchingCinemas] = useState(true)
+	const [theatres, setTheatres] = useState([])
+	const [isFetchingTheatres, setIsFetchingTheatres] = useState(true)
 
-	const fetchCinemas = async (newSelectedCinema) => {
+	const fetchTheatres = async (newSelectedTheatre) => {
 		try {
-			setIsFetchingCinemas(true)
+			setIsFetchingTheatres(true)
 			let response
 			if (auth.role === 'admin') {
-				response = await axios.get('/cinema/unreleased', {
+				response = await axios.get('/theatre/unreleased', {
 					headers: {
 						Authorization: `Bearer ${auth.token}`
 					}
 				})
 			} else {
-				response = await axios.get('/cinema')
+				response = await axios.get('/theatre')
 			}
 
 			// console.log(response.data.data)
-			setCinemas(response.data.data)
-			if (newSelectedCinema) {
-				response.data.data.map((cinema, index) => {
-					if (cinema.name === newSelectedCinema) {
-						setSelectedCinemaIndex(index)
-						sessionStorage.setItem('selectedCinemaIndex', index)
+			setTheatres(response.data.data)
+			if (newSelectedTheatre) {
+				response.data.data.map((theatre, index) => {
+					if (theatre.name === newSelectedTheatre) {
+						setSelectedTheatreIndex(index)
+						sessionStorage.setItem('selectedTheatreIndex', index)
 					}
 				})
 			}
 		} catch (error) {
 			console.error(error)
 		} finally {
-			setIsFetchingCinemas(false)
+			setIsFetchingTheatres(false)
 		}
 	}
 
 	useEffect(() => {
-		fetchCinemas()
+		fetchTheatres()
 	}, [])
 
 	const props = {
-		cinemas,
-		selectedCinemaIndex,
-		setSelectedCinemaIndex,
-		fetchCinemas,
+		theatres,
+		selectedTheatreIndex,
+		setSelectedTheatreIndex,
+		fetchTheatres,
 		auth,
-		isFetchingCinemas
+		isFetchingTheatres
 	}
 	return (
 		<div className="flex min-h-screen flex-col gap-4 bg-gradient-to-br from-indigo-900 to-blue-500 pb-8 sm:gap-8">
 			<Navbar />
 			<TheatreLists {...props} />
-			{cinemas[selectedCinemaIndex]?.name && <ScreenListsByTheatre {...props} />}
+			{theatres[selectedTheatreIndex]?.name && <ScreenListsByTheatre {...props} />}
 		</div>
 	)
 }

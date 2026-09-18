@@ -1,6 +1,6 @@
 const Movie = require('../models/Movie')
 const Showtime = require('../models/Showtime')
-const Theater = require('../models/Theater')
+const Screen = require('../models/Screen')
 const User = require('../models/User')
 
 //@desc     GET showtimes
@@ -11,7 +11,7 @@ exports.getShowtimes = async (req, res, next) => {
 		const showtimes = await Showtime.find({ isRelease: true })
 			.populate([
 				'movie',
-				{ path: 'theater', populate: { path: 'cinema', select: 'name' }, select: 'number cinema seatPlan' }
+				{ path: 'screen', populate: { path: 'theatre', select: 'name' }, select: 'number theatre seatPlan' }
 			])
 			.select('-seats.user -seats.row -seats.number')
 
@@ -30,7 +30,7 @@ exports.getUnreleasedShowtimes = async (req, res, next) => {
 		const showtimes = await Showtime.find()
 			.populate([
 				'movie',
-				{ path: 'theater', populate: { path: 'cinema', select: 'name' }, select: 'number cinema seatPlan' }
+				{ path: 'screen', populate: { path: 'theatre', select: 'name' }, select: 'number theatre seatPlan' }
 			])
 			.select('-seats.user -seats.row -seats.number')
 
@@ -49,7 +49,7 @@ exports.getShowtime = async (req, res, next) => {
 		const showtime = await Showtime.findById(req.params.id)
 			.populate([
 				'movie',
-				{ path: 'theater', populate: { path: 'cinema', select: 'name' }, select: 'number cinema seatPlan' }
+				{ path: 'screen', populate: { path: 'theatre', select: 'name' }, select: 'number theatre seatPlan' }
 			])
 			.select('-seats.user')
 
@@ -75,7 +75,7 @@ exports.getShowtimeWithUser = async (req, res, next) => {
 	try {
 		const showtime = await Showtime.findById(req.params.id).populate([
 			'movie',
-			{ path: 'theater', populate: { path: 'cinema', select: 'name' }, select: 'number cinema seatPlan' },
+			{ path: 'screen', populate: { path: 'theatre', select: 'name' }, select: 'number theatre seatPlan' },
 			{ path: 'seats', populate: { path: 'user', select: 'username email role' } }
 		])
 
@@ -95,7 +95,7 @@ exports.getShowtimeWithUser = async (req, res, next) => {
 //@access   Private
 exports.addShowtime = async (req, res, next) => {
 	try {
-		const { movie: movieId, showtime: showtimeString, theater: theaterId, repeat = 1, isRelease } = req.body
+		const { movie: movieId, showtime: showtimeString, screen: screenId, repeat = 1, isRelease } = req.body
 
 		if (repeat > 31 || repeat < 1) {
 			return res.status(400).json({ success: false, message: `Repeat is not a valid number between 1 to 31` })
@@ -105,10 +105,10 @@ exports.addShowtime = async (req, res, next) => {
 		let showtimes = []
 		let showtimeIds = []
 
-		const theater = await Theater.findById(theaterId)
+		const screen = await Screen.findById(screenId)
 
-		if (!theater) {
-			return res.status(400).json({ success: false, message: `Theater not found with id of ${req.params.id}` })
+		if (!screen) {
+			return res.status(400).json({ success: false, message: `Screen not found with id of ${req.params.id}` })
 		}
 
 		const movie = await Movie.findById(movieId)
@@ -118,15 +118,15 @@ exports.addShowtime = async (req, res, next) => {
 		}
 
 		for (let i = 0; i < repeat; i++) {
-			const showtimeDoc = await Showtime.create({ theater, movie: movie._id, showtime, isRelease })
+			const showtimeDoc = await Showtime.create({ screen, movie: movie._id, showtime, isRelease })
 
 			showtimeIds.push(showtimeDoc._id)
 			showtimes.push(new Date(showtime))
 			showtime.setDate(showtime.getDate() + 1)
 		}
-		theater.showtimes = theater.showtimes.concat(showtimeIds)
+		screen.showtimes = screen.showtimes.concat(showtimeIds)
 
-		await theater.save()
+		await screen.save()
 
 		res.status(200).json({
 			success: true,
@@ -146,7 +146,7 @@ exports.purchase = async (req, res, next) => {
 		const { seats } = req.body
 		const user = req.user
 
-		const showtime = await Showtime.findById(req.params.id).populate({ path: 'theater', select: 'seatPlan' })
+		const showtime = await Showtime.findById(req.params.id).populate({ path: 'screen', select: 'seatPlan' })
 
 		if (!showtime) {
 			return res.status(400).json({ success: false, message: `Showtime not found with id of ${req.params.id}` })
@@ -154,8 +154,8 @@ exports.purchase = async (req, res, next) => {
 
 		const isSeatValid = seats.every((seatNumber) => {
 			const [row, number] = seatNumber.match(/([A-Za-z]+)(\d+)/).slice(1)
-			const maxRow = showtime.theater.seatPlan.row
-			const maxCol = showtime.theater.seatPlan.column
+			const maxRow = showtime.screen.seatPlan.row
+			const maxCol = showtime.screen.seatPlan.column
 
 			if (maxRow.length !== row.length) {
 				return maxRow.length > row.length

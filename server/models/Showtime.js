@@ -1,7 +1,7 @@
 const mongoose = require('mongoose')
 
 const showtimeSchema = new mongoose.Schema({
-	theater: { type: mongoose.Schema.ObjectId, ref: 'Theater' },
+	screen: { type: mongoose.Schema.ObjectId, ref: 'Screen' },
 	movie: { type: mongoose.Schema.ObjectId, ref: 'Movie' },
 	showtime: Date,
 	seats: [

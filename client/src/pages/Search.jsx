@@ -30,8 +30,8 @@ const Search = () => {
 	const [isFetchingShowtimesDone, setIsFetchingShowtimesDone] = useState(false)
 
 	const [showtimes, setShowtimes] = useState([])
-	const [filterCinema, setFilterCinema] = useState(null)
-	const [filterTheater, setFilterTheater] = useState(null)
+	const [filterTheatre, setFilterTheatre] = useState(null)
+	const [filterScreen, setFilterScreen] = useState(null)
 	const [filterMovie, setFilterMovie] = useState(null)
 	const [filterDate, setFilterDate] = useState(null)
 	const [filterDateFrom, setFilterDateFrom] = useState(null)
@@ -47,8 +47,8 @@ const Search = () => {
 	const [isCheckAll, setIsCheckAll] = useState(false)
 	const [checkedShowtimes, setCheckedShowtimes] = useState([])
 
-	const [sortCinema, setSortCinema] = useState(0) // -1: descending, 0 no sort, 1 ascending
-	const [sortTheater, setSortTheater] = useState(0)
+	const [sortTheatre, setSortTheatre] = useState(0) // -1: descending, 0 no sort, 1 ascending
+	const [sortScreen, setSortScreen] = useState(0)
 	const [sortMovie, setSortMovie] = useState(0)
 	const [sortDate, setSortDate] = useState(0)
 	const [sortTime, setSortTime] = useState(0)
@@ -56,8 +56,8 @@ const Search = () => {
 	const [sortRelease, setSortRelease] = useState(0)
 
 	const resetSort = () => {
-		setSortCinema(0)
-		setSortTheater(0)
+		setSortTheatre(0)
+		setSortScreen(0)
 		setSortMovie(0)
 		setSortDate(0)
 		setSortTime(0)
@@ -76,8 +76,8 @@ const Search = () => {
 			const minutes = showtimeDate.getMinutes().toString().padStart(2, '0')
 			const formattedTime = `${hours} : ${minutes}`
 			return (
-				(!filterCinema || filterCinema.map((cinema) => cinema.value).includes(showtime.theater.cinema._id)) &&
-				(!filterTheater || filterTheater.map((theater) => theater.value).includes(showtime.theater.number)) &&
+				(!filterTheatre || filterTheatre.map((theatre) => theatre.value).includes(showtime.screen.theatre._id)) &&
+				(!filterScreen || filterScreen.map((screen) => screen.value).includes(showtime.screen.number)) &&
 				(!filterMovie || filterMovie.map((movie) => movie.value).includes(showtime.movie._id)) &&
 				(!filterDate || filterDate.map((showtime) => showtime.value).includes(formattedDate)) &&
 				(!filterDateFrom || new Date(filterDateFrom.value) <= new Date(formattedDate)) &&
@@ -100,11 +100,11 @@ const Search = () => {
 			)
 		})
 		.sort((a, b) => {
-			if (sortCinema) {
-				return sortCinema * a.theater.cinema.name.localeCompare(b.theater.cinema.name)
+			if (sortTheatre) {
+				return sortTheatre * a.screen.theatre.name.localeCompare(b.screen.theatre.name)
 			}
-			if (sortTheater) {
-				return sortTheater * (a.theater.number - b.theater.number)
+			if (sortScreen) {
+				return sortScreen * (a.screen.number - b.screen.number)
 			}
 			if (sortMovie) {
 				return sortMovie * a.movie.name.localeCompare(b.movie.name)
@@ -333,16 +333,16 @@ const Search = () => {
 							<div className="flex flex-col">
 								<h4 className="pt-1 text-lg font-bold text-gray-800">Theatre :</h4>
 								<Select
-									value={filterCinema}
+									value={filterTheatre}
 									options={Array.from(
-										new Set(showtimes.map((showtime) => showtime.theater.cinema._id))
+										new Set(showtimes.map((showtime) => showtime.screen.theatre._id))
 									).map((value) => ({
 										value,
-										label: showtimes.find((showtime) => showtime.theater.cinema._id === value)
-											.theater.cinema.name
+										label: showtimes.find((showtime) => showtime.screen.theatre._id === value)
+											.screen.theatre.name
 									}))}
 									onChange={(value) => {
-										setFilterCinema(value)
+										setFilterTheatre(value)
 										resetState()
 									}}
 									isClearable={true}
@@ -354,15 +354,15 @@ const Search = () => {
 							<div className="flex flex-col">
 								<h4 className="pt-1 text-lg font-bold text-gray-800">Screen :</h4>
 								<Select
-									value={filterTheater}
-									options={Array.from(new Set(showtimes.map((showtime) => showtime.theater.number)))
+									value={filterScreen}
+									options={Array.from(new Set(showtimes.map((showtime) => showtime.screen.number)))
 										.sort((a, b) => a - b)
 										.map((value) => ({
 											value,
 											label: value.toString()
 										}))}
 									onChange={(value) => {
-										setFilterTheater(value)
+										setFilterScreen(value)
 										resetState()
 									}}
 									isClearable={true}
@@ -728,28 +728,28 @@ const Search = () => {
 					<button
 						className="sticky top-0 flex justify-center bg-gradient-to-br from-gray-800 to-gray-700 hover:from-gray-700 hover:to-gray-600 px-2 py-1 text-center text-xl font-semibold text-white"
 						onClick={() => {
-							let prevValue = sortCinema
+							let prevValue = sortTheatre
 							resetSort()
-							setSortCinema(prevValue === 0 ? 1 : prevValue === 1 ? -1 : 0)
+							setSortTheatre(prevValue === 0 ? 1 : prevValue === 1 ? -1 : 0)
 						}}
 					>
 						<p className="ml-auto">Theatre</p>
-						{sortCinema === 0 && <ChevronUpDownIcon className="ml-auto w-6 h-6" />}
-						{sortCinema === 1 && <ChevronUpIcon className="ml-auto w-6 h-6" />}
-						{sortCinema === -1 && <ChevronDownIcon className="ml-auto w-6 h-6" />}
+						{sortTheatre === 0 && <ChevronUpDownIcon className="ml-auto w-6 h-6" />}
+						{sortTheatre === 1 && <ChevronUpIcon className="ml-auto w-6 h-6" />}
+						{sortTheatre === -1 && <ChevronDownIcon className="ml-auto w-6 h-6" />}
 					</button>
 					<button
 						className="sticky top-0 flex justify-center bg-gradient-to-br from-gray-800 to-gray-700 hover:from-gray-700 hover:to-gray-600 px-2 py-1 text-center text-xl font-semibold text-white"
 						onClick={() => {
-							let prevValue = sortTheater
+							let prevValue = sortScreen
 							resetSort()
-							setSortTheater(prevValue === 0 ? 1 : prevValue === 1 ? -1 : 0)
+							setSortScreen(prevValue === 0 ? 1 : prevValue === 1 ? -1 : 0)
 						}}
 					>
 						<p className="ml-auto">Screen</p>
-						{sortTheater === 0 && <ChevronUpDownIcon className="ml-auto w-6 h-6" />}
-						{sortTheater === 1 && <ChevronUpIcon className="ml-auto w-6 h-6" />}
-						{sortTheater === -1 && <ChevronDownIcon className="ml-auto w-6 h-6" />}
+						{sortScreen === 0 && <ChevronUpDownIcon className="ml-auto w-6 h-6" />}
+						{sortScreen === 1 && <ChevronUpIcon className="ml-auto w-6 h-6" />}
+						{sortScreen === -1 && <ChevronDownIcon className="ml-auto w-6 h-6" />}
 					</button>
 					<button
 						className="sticky top-0 flex justify-center bg-gradient-to-br from-gray-800 to-gray-700 hover:from-gray-700 hover:to-gray-600 px-2 py-1 text-center text-xl font-semibold text-white"
@@ -856,14 +856,14 @@ const Search = () => {
 											isCheckedRow && 'border-white bg-blue-200 text-blue-800'
 										}`}
 									>
-										{showtime.theater.cinema.name}
+										{showtime.screen.theatre.name}
 									</div>
 									<div
 										className={`border-t-2 border-indigo-200 px-2 py-1 ${
 											isCheckedRow && 'border-white bg-blue-200 text-blue-800'
 										}`}
 									>
-										{showtime.theater.number}
+										{showtime.screen.number}
 									</div>
 									<div
 										className={`border-t-2 border-indigo-200 px-2 py-1 ${

@@ -10,47 +10,47 @@ const ScreenListsByMovie = ({ movies, selectedMovieIndex, setSelectedMovieIndex,
 	const [selectedDate, setSelectedDate] = useState(
 		(sessionStorage.getItem('selectedDate') && new Date(sessionStorage.getItem('selectedDate'))) || new Date()
 	)
-	const [theaters, setTheaters] = useState([])
-	const [isFetchingTheatersDone, setIsFetchingTheatersDone] = useState(false)
-	const [selectedCinemaIndex, setSelectedCinemaIndex] = useState(
-		parseInt(sessionStorage.getItem('selectedCinemaIndex'))
+	const [screens, setScreens] = useState([])
+	const [isFetchingScreensDone, setIsFetchingScreensDone] = useState(false)
+	const [selectedTheatreIndex, setSelectedTheatreIndex] = useState(
+		parseInt(sessionStorage.getItem('selectedTheatreIndex'))
 	)
-	const [cinemas, setCinemas] = useState([])
-	const [isFetchingCinemas, setIsFetchingCinemas] = useState(true)
+	const [theatres, setTheatres] = useState([])
+	const [isFetchingTheatres, setIsFetchingTheatres] = useState(true)
 
-	const fetchCinemas = async (data) => {
+	const fetchTheatres = async (data) => {
 		try {
-			setIsFetchingCinemas(true)
+			setIsFetchingTheatres(true)
 			let response
 			if (auth.role === 'admin') {
-				response = await axios.get('/cinema/unreleased', {
+				response = await axios.get('/theatre/unreleased', {
 					headers: {
 						Authorization: `Bearer ${auth.token}`
 					}
 				})
 			} else {
-				response = await axios.get('/cinema')
+				response = await axios.get('/theatre')
 			}
 			// console.log(response.data.data)
-			setCinemas(response.data.data)
+			setTheatres(response.data.data)
 		} catch (error) {
 			console.error(error)
 		} finally {
-			setIsFetchingCinemas(false)
+			setIsFetchingTheatres(false)
 		}
 	}
 
 	useEffect(() => {
-		fetchCinemas()
+		fetchTheatres()
 	}, [])
 
-	const fetchTheaters = async (data) => {
+	const fetchScreens = async (data) => {
 		try {
-			setIsFetchingTheatersDone(false)
+			setIsFetchingScreensDone(false)
 			let response
 			if (auth.role === 'admin') {
 				response = await axios.get(
-					`/theater/movie/unreleased/${
+					`/screen/movie/unreleased/${
 						movies[selectedMovieIndex]._id
 					}/${selectedDate.toISOString()}/${new Date().getTimezoneOffset()}`,
 					{
@@ -61,40 +61,40 @@ const ScreenListsByMovie = ({ movies, selectedMovieIndex, setSelectedMovieIndex,
 				)
 			} else {
 				response = await axios.get(
-					`/theater/movie/${
+					`/screen/movie/${
 						movies[selectedMovieIndex]._id
 					}/${selectedDate.toISOString()}/${new Date().getTimezoneOffset()}`
 				)
 			}
-			setTheaters(
+			setScreens(
 				response.data.data.sort((a, b) => {
-					if (a.cinema.name > b.cinema.name) return 1
-					if (a.cinema.name === b.cinema.name && a.number > b.number) return 1
+					if (a.theatre.name > b.theatre.name) return 1
+					if (a.theatre.name === b.theatre.name && a.number > b.number) return 1
 					return -1
 				})
 			)
-			setIsFetchingTheatersDone(true)
+			setIsFetchingScreensDone(true)
 		} catch (error) {
 			console.error(error)
 		}
 	}
 
 	useEffect(() => {
-		fetchTheaters()
+		fetchScreens()
 	}, [selectedMovieIndex, selectedDate])
 
 	const props = {
-		cinemas,
-		selectedCinemaIndex,
-		setSelectedCinemaIndex,
-		fetchCinemas,
+		theatres,
+		selectedTheatreIndex,
+		setSelectedTheatreIndex,
+		fetchTheatres,
 		auth,
-		isFetchingCinemas
+		isFetchingTheatres
 	}
 
-	const filteredTheaters = theaters.filter((theater) => {
-		if (selectedCinemaIndex === 0 || !!selectedCinemaIndex) {
-			return theater.cinema?.name === cinemas[selectedCinemaIndex]?.name
+	const filteredScreens = screens.filter((screen) => {
+		if (selectedTheatreIndex === 0 || !!selectedTheatreIndex) {
+			return screen.theatre?.name === theatres[selectedTheatreIndex]?.name
 		}
 		return true
 	})
@@ -116,40 +116,40 @@ const ScreenListsByMovie = ({ movies, selectedMovieIndex, setSelectedMovieIndex,
 							</div>
 						</div>
 					</div>
-					{isFetchingTheatersDone ? (
+					{isFetchingScreensDone ? (
 						<div className="flex flex-col">
-							{filteredTheaters.map((theater, index) => {
+							{filteredScreens.map((screen, index) => {
 								return (
 									<div
 										key={index}
 										className={`flex flex-col ${
 											index !== 0 &&
-											filteredTheaters[index - 1]?.cinema.name !==
-												filteredTheaters[index].cinema.name &&
+											filteredScreens[index - 1]?.theatre.name !==
+												filteredScreens[index].theatre.name &&
 											'mt-6'
 										}`}
 									>
-										{filteredTheaters[index - 1]?.cinema.name !==
-											filteredTheaters[index].cinema.name && (
+										{filteredScreens[index - 1]?.theatre.name !==
+											filteredScreens[index].theatre.name && (
 											<div className="rounded-t-md bg-gradient-to-br from-indigo-800 to-blue-700 px-2 py-1.5 text-center text-2xl font-semibold text-white sm:py-2">
-												<h2>{theater.cinema.name}</h2>
+												<h2>{screen.theatre.name}</h2>
 											</div>
 										)}
 										<ScreenShort
-											theaterId={theater._id}
+											screenId={screen._id}
 											movies={movies}
 											selectedDate={selectedDate}
 											filterMovie={movies[selectedMovieIndex]}
 											rounded={
-												index == filteredTheaters.length ||
-												filteredTheaters[index + 1]?.cinema.name !==
-													filteredTheaters[index].cinema.name
+												index == filteredScreens.length ||
+												filteredScreens[index + 1]?.theatre.name !==
+													filteredScreens[index].theatre.name
 											}
 										/>
 									</div>
 								)
 							})}
-							{filteredTheaters.length === 0 && (
+							{filteredScreens.length === 0 && (
 								<p className="text-center text-xl font-semibold text-gray-700">
 									There are no showtimes available
 								</p>

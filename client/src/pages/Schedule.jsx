@@ -24,39 +24,39 @@ const Schedule = () => {
 	const [selectedDate, setSelectedDate] = useState(
 		(sessionStorage.getItem('selectedDate') && new Date(sessionStorage.getItem('selectedDate'))) || new Date()
 	)
-	const [selectedCinemaIndex, setSelectedCinemaIndex] = useState(
-		parseInt(sessionStorage.getItem('selectedCinemaIndex')) || 0
+	const [selectedTheatreIndex, setSelectedTheatreIndex] = useState(
+		parseInt(sessionStorage.getItem('selectedTheatreIndex')) || 0
 	)
-	const [cinemas, setCinemas] = useState([])
-	const [isFetchingCinemas, setIsFetchingCinemas] = useState(true)
+	const [theatres, setTheatres] = useState([])
+	const [isFetchingTheatres, setIsFetchingTheatres] = useState(true)
 	const [movies, setMovies] = useState()
 	const [isAddingShowtime, SetIsAddingShowtime] = useState(false)
 	const [selectedMovie, setSelectedMovie] = useState(null)
 
-	const fetchCinemas = async (data) => {
+	const fetchTheatres = async (data) => {
 		try {
-			setIsFetchingCinemas(true)
+			setIsFetchingTheatres(true)
 			let response
 			if (auth.role === 'admin') {
-				response = await axios.get('/cinema/unreleased', {
+				response = await axios.get('/theatre/unreleased', {
 					headers: {
 						Authorization: `Bearer ${auth.token}`
 					}
 				})
 			} else {
-				response = await axios.get('/cinema')
+				response = await axios.get('/theatre')
 			}
 			// console.log(response.data.data)
-			setCinemas(response.data.data)
+			setTheatres(response.data.data)
 		} catch (error) {
 			console.error(error)
 		} finally {
-			setIsFetchingCinemas(false)
+			setIsFetchingTheatres(false)
 		}
 	}
 
 	useEffect(() => {
-		fetchCinemas()
+		fetchTheatres()
 	}, [])
 
 	const fetchMovies = async (data) => {
@@ -95,7 +95,7 @@ const Schedule = () => {
 			showtime.setHours(hours, minutes, 0)
 			const response = await axios.post(
 				'/showtime',
-				{ movie: data.movie, showtime, theater: data.theater, repeat: data.repeat, isRelease: data.isRelease },
+				{ movie: data.movie, showtime, screen: data.screen, repeat: data.repeat, isRelease: data.isRelease },
 				{
 					headers: {
 						Authorization: `Bearer ${auth.token}`
@@ -103,7 +103,7 @@ const Schedule = () => {
 				}
 			)
 			// console.log(response.data)
-			fetchCinemas()
+			fetchTheatres()
 			if (data.autoIncrease) {
 				const movieLength = movies.find((movie) => movie._id === data.movie).length
 				const [GapHours, GapMinutes] = data.gap.split(':').map(Number)
@@ -154,20 +154,20 @@ const Schedule = () => {
 	}
 
 	const props = {
-		cinemas,
-		selectedCinemaIndex,
-		setSelectedCinemaIndex,
-		fetchCinemas,
+		theatres,
+		selectedTheatreIndex,
+		setSelectedTheatreIndex,
+		fetchTheatres,
 		auth,
-		isFetchingCinemas
+		isFetchingTheatres
 	}
 
 	return (
 		<div className="flex min-h-screen flex-col gap-4 bg-gradient-to-br from-indigo-900 to-blue-500 pb-8 text-gray-900 sm:gap-8">
 			<Navbar />
 			<TheatreLists {...props} />
-			{selectedCinemaIndex !== null &&
-				(cinemas[selectedCinemaIndex]?.theaters?.length ? (
+			{selectedTheatreIndex !== null &&
+				(theatres[selectedTheatreIndex]?.screens?.length ? (
 					<div className="mx-4 flex flex-col gap-2 rounded-lg bg-gradient-to-br from-indigo-200 to-blue-100 p-4 drop-shadow-xl sm:mx-8 sm:gap-4 sm:p-6">
 						<h2 className="text-3xl font-bold text-gray-900">Schedule</h2>
 						<DateSelector selectedDate={selectedDate} setSelectedDate={setSelectedDate} />
@@ -185,15 +185,15 @@ const Schedule = () => {
 											<select
 												className="h-9 w-full rounded bg-white px-2 py-1 font-semibold text-gray-900 drop-shadow-sm"
 												required
-												{...register('theater', { required: true })}
+												{...register('screen', { required: true })}
 											>
 												<option value="" defaultValue>
 													Choose a screen
 												</option>
-												{cinemas[selectedCinemaIndex].theaters?.map((theater, index) => {
+												{theatres[selectedTheatreIndex].screens?.map((screen, index) => {
 													return (
-														<option key={index} value={theater._id}>
-															{theater.number}
+														<option key={index} value={screen._id}>
+															{screen.number}
 														</option>
 													)
 												})}
@@ -337,14 +337,14 @@ const Schedule = () => {
 								</button>
 							</form>
 						)}
-						{isFetchingCinemas ? (
+						{isFetchingTheatres ? (
 							<Loading />
 						) : (
 							<div>
 								<h2 className="text-2xl font-bold">Screens</h2>
-								{cinemas[selectedCinemaIndex]?._id && (
+								{theatres[selectedTheatreIndex]?._id && (
 									<ScheduleTable
-										cinema={cinemas[selectedCinemaIndex]}
+										theatre={theatres[selectedTheatreIndex]}
 										selectedDate={selectedDate}
 										auth={auth}
 									/>

@@ -11,8 +11,8 @@ const dns = require('node:dns');
 dns.setServers(['8.8.8.8', '1.1.1.1']);
 
 const auth = require('./routes/auth')
-const cinema = require('./routes/cinema')
-const theater = require('./routes/theater')
+const theatre = require('./routes/theatre')
+const screen = require('./routes/screen')
 const movie = require('./routes/movie')
 const showtime = require('./routes/showtime')
 
@@ -36,8 +36,8 @@ app.use(helmet())
 app.use(xss())
 
 app.use('/auth', auth)
-app.use('/cinema', cinema)
-app.use('/theater', theater)
+app.use('/theatre', theatre)
+app.use('/screen', screen)
 app.use('/movie', movie)
 app.use('/showtime', showtime)
 
