@@ -1,21 +1,21 @@
 import { CheckIcon } from '@heroicons/react/24/outline'
-import { memo, useState } from 'react'
+import { memo } from 'react'
 
-const Seat = ({ seat, setSelectedSeats, selectable, isAvailable }) => {
-	const [isSelected, setIsSelected] = useState(false)
-	return !isAvailable ? (
+const Seat = ({ seat, setSelectedSeats, selectable, isAvailable, isSelected, isBooked }) => {
+	return isBooked || !isAvailable ? (
 		<button
-			title={`${seat.row}${seat.number}`}
+			disabled
+			aria-label={`${seat.row}${seat.number}: ${isBooked ? 'Booked' : 'On hold'}`}
+			title={`${seat.row}${seat.number}: ${isBooked ? 'Booked' : 'On hold'}`}
 			className="flex h-8 w-8 cursor-not-allowed items-center justify-center"
 		>
-			<div className="h-6 w-6 rounded bg-gray-500 drop-shadow-md"></div>
+			<div className={`h-6 w-6 rounded drop-shadow-md ${isBooked ? 'bg-gray-500' : 'bg-orange-500'}`}></div>
 		</button>
 	) : isSelected ? (
 		<button
 			title={`${seat.row}${seat.number}`}
 			className="flex h-8 w-8 items-center justify-center"
 			onClick={() => {
-				setIsSelected(false)
 				setSelectedSeats((prev) => prev.filter((e) => e !== `${seat.row}${seat.number}`))
 			}}
 		>
@@ -29,7 +29,6 @@ const Seat = ({ seat, setSelectedSeats, selectable, isAvailable }) => {
 			className={`flex h-8 w-8 items-center justify-center ${!selectable && 'cursor-not-allowed'}`}
 			onClick={() => {
 				if (selectable) {
-					setIsSelected(true)
 					setSelectedSeats((prev) => [...prev, `${seat.row}${seat.number}`])
 				}
 			}}

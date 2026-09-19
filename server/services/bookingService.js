@@ -119,4 +119,25 @@ async function expire() {
 	)
 }
 
-module.exports = { create, owned, expire, validateSeats, seatParts, availableFilter }
+async function cancel(id, userId) {
+	let booking
+	// Cancel the booking and release its holds together, without removing paid seats.
+	await mongoose.connection.transaction(async (session) => {
+		booking = await Booking.findOne({ _id: objectId(id), user: userId }).session(session)
+		if (!booking) fail(404, 'Booking not found')
+		if (booking.status === 'confirmed') fail(409, 'Confirmed bookings cannot be cancelled')
+		if (booking.status !== 'cancelled') {
+			booking.status = 'cancelled'
+			booking.cancelledAt = new Date()
+			await booking.save({ session })
+		}
+		await Showtime.updateOne(
+			{ _id: booking.showtime },
+			{ $pull: { holds: { booking: booking._id } } },
+			{ session }
+		)
+	})
+	return booking
+}
+
+module.exports = { create, owned, expire, cancel, validateSeats, seatParts, availableFilter }

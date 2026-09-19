@@ -16,6 +16,7 @@ const Showtime = () => {
 	const { id } = useParams()
 	const navigate = useNavigate()
 	const [creatingBooking, setCreatingBooking] = useState(false)
+	const [refreshing, setRefreshing] = useState(false)
 	const bookingRequest = useRef(null)
 	const [showtime, setShowtime] = useState({})
 	const [selectedSeats, setSelectedSeats] = useState([])
@@ -41,6 +42,7 @@ const Showtime = () => {
 	})
 
 	const fetchShowtime = async (data) => {
+		setRefreshing(true)
 		try {
 			let response
 			if (auth.role === 'admin') {
@@ -52,8 +54,14 @@ const Showtime = () => {
 			} else {
 				response = await axios.get(`/showtime/${id}`)
 			}
-			// console.log(response.data.data)
-			setShowtime(response.data.data)
+			const data = response.data.data
+			if (auth.role === 'admin' && data.isRelease) {
+				const availability = await axios.get(`/showtime/${id}`)
+				data.unavailableSeats = availability.data.data.unavailableSeats
+			}
+			setShowtime(data)
+			const unavailable = new Set(data.unavailableSeats || data.seats.map((seat) => `${seat.row}${seat.number}`))
+			setSelectedSeats((seats) => seats.filter((seat) => !unavailable.has(seat)))
 		} catch (error) {
 			console.error(error)
 			toast.error(error.response?.data?.message || 'Unable to load showtime', {
@@ -61,6 +69,8 @@ const Showtime = () => {
 				autoClose: 2000,
 				pauseOnHover: false
 			})
+		} finally {
+			setRefreshing(false)
 		}
 	}
 
@@ -89,6 +99,8 @@ const Showtime = () => {
 		colNumber.push(k)
 	}
 
+	const bookedSeats = new Set(showtime.seats?.map((seat) => `${seat.row}${seat.number}`) || [])
+	const unavailableSeats = new Set(showtime.unavailableSeats || bookedSeats)
 	const isPast = new Date(showtime.showtime) < new Date()
 	const priced = Number.isSafeInteger(showtime.ticketPrice) && showtime.ticketPrice > 0
 	const startCheckout = async () => {
@@ -143,6 +155,14 @@ const Showtime = () => {
 
 						<p className="mt-3 text-sm text-indigo-950">{priced ? `${money(showtime.ticketPrice)} per ticket · Select up to 10 seats${selectedSeats.length ? ` · Total ${money(showtime.ticketPrice * selectedSeats.length)}` : ''}` : 'Booking will open once the ticket price is set.'}</p>
 						<div className="mx-auto mt-4 flex flex-col items-center rounded-lg bg-gradient-to-br from-indigo-100 to-white p-4 text-center drop-shadow-lg">
+							<button
+								onClick={() => fetchShowtime()}
+								disabled={refreshing || creatingBooking}
+								className="mb-3 rounded-lg border border-indigo-300 px-4 py-2 font-semibold text-indigo-700 disabled:opacity-50"
+							>
+								{refreshing ? 'Refreshing seats...' : 'Refresh seats'}
+							</button>
+							<p className="mb-3 text-sm text-gray-700">White: Available / Blue: Selected / Black: Booked / Orange: On hold</p>
 							<div className="w-full rounded-lg bg-white">
 								<div className="bg-gradient-to-r from-indigo-800 to-blue-700 bg-clip-text text-xl font-bold text-transparent">
 									Screen
@@ -176,13 +196,9 @@ const Showtime = () => {
 																seat={{ row: rowLetter, number: col }}
 																setSelectedSeats={setSelectedSeats}
 																selectable={!isPast && priced && showtime.isRelease && selectedSeats.length < 10 && !creatingBooking}
-																isAvailable={
-																	!showtime.seats.find(
-																		(seat) =>
-																			seat.row === rowLetter &&
-																			seat.number === col
-																	)
-																}
+																isSelected={selectedSeats.includes(`${rowLetter}${col}`)}
+																isBooked={bookedSeats.has(`${rowLetter}${col}`)}
+																isAvailable={!unavailableSeats.has(`${rowLetter}${col}`)}
 															/>
 														)
 													})}

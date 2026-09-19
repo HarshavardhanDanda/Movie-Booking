@@ -52,7 +52,7 @@ exports.getShowtime = async (req, res, next) => {
 				'movie',
 				{ path: 'screen', populate: { path: 'theatre', select: 'name' }, select: 'number theatre seatPlan' }
 			])
-			.select('-seats.user')
+			.select('-seats.user +holds')
 
 		if (!showtime) {
 			return res
@@ -64,7 +64,16 @@ exports.getShowtime = async (req, res, next) => {
 			return res.status(400).json({ success: false, message: `Showtime is not released` })
 		}
 
-		res.status(200).json({ success: true, data: showtime })
+		const data = showtime.toObject()
+		const now = new Date()
+		// Confirmed seats and unexpired holds are unavailable to select.
+		data.unavailableSeats = [...new Set([
+			...showtime.seats.map((seat) => `${seat.row}${seat.number}`),
+			...(showtime.holds || []).filter((hold) => hold.expiresAt > now).flatMap((hold) => hold.seats)
+		])]
+		// Only seat names are public; keep booking hold details private.
+		delete data.holds
+		res.status(200).json({ success: true, data })
 	} catch (err) {
 		console.log(err)
 		res.status(400).json({ success: false, message: err })

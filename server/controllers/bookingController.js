@@ -7,6 +7,9 @@ exports.create = endpoint(async (req, res) => {
 	const booking = await bookings.create(req.user._id, req.body, req.get('Idempotency-Key'))
 	res.status(201).json({ success: true, data: booking })
 })
+exports.cancel = endpoint(async (req, res) => {
+	res.json({ success: true, data: await bookings.cancel(req.params.id, req.user._id) })
+})
 exports.get = endpoint(async (req, res) => {
 	await bookings.expire()
 	const booking = await bookings.owned(req.params.id, req.user._id)

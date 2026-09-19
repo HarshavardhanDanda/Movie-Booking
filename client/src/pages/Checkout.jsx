@@ -111,6 +111,21 @@ export default function Checkout() {
 		}
 	}
 
+	async function cancelBooking() {
+		if (busy || awaitingVerification) return
+		setBusy(true)
+		setError('')
+		try {
+			const { data } = await axios.post(`/bookings/${id}/cancel`, {}, config)
+			setBooking(data.data)
+			setNotice('Booking cancelled. Your seats have been released.')
+		} catch (err) {
+			setError(message(err))
+		} finally {
+			setBusy(false)
+		}
+	}
+
 	async function pay() {
 		if (busy) return
 		setBusy(true)
@@ -257,6 +272,15 @@ export default function Checkout() {
 											{canPay && (
 												<button className={primary} onClick={pay} disabled={busy}>
 													{busy ? 'Processing…' : `Pay ${money(booking.totalAmount)}`}
+												</button>
+											)}
+											{canPay && (
+												<button
+													className="mt-3 w-full rounded-lg border border-red-300 px-4 py-2 font-semibold text-red-700 disabled:opacity-50"
+													onClick={cancelBooking}
+													disabled={busy}
+												>
+													Cancel booking
 												</button>
 											)}
 											{(awaitingVerification || booking.razorpayOrderId) && (

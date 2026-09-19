@@ -5,5 +5,6 @@ const controller = require('../controllers/bookingController')
 router.use(protect)
 router.post('/', controller.create)
 router.get('/my', controller.my)
+router.post('/:id/cancel', controller.cancel)
 router.get('/:id', controller.get)
 module.exports = router

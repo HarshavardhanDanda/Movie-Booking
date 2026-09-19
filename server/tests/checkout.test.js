@@ -77,6 +77,31 @@ test('simple checkout: prices, seat conflicts and payment verification', { timeo
 	assert.equal((await payments.verify(user, input)).booking.status, 'confirmed')
 	assert.equal(await Payment.countDocuments(), 1)
 	assert.equal((await Showtime.findById(showtime.id)).seats.length, 1)
+	await assert.rejects(bookings.cancel(booking.id, user), { status: 409 })
+	const pending = await bookings.create(user, { showtime: showtime.id, seats: ['A2'] }, crypto.randomUUID())
+	await assert.rejects(bookings.cancel(pending.id, new mongoose.Types.ObjectId()), { status: 404 })
+	assert.equal((await bookings.cancel(pending.id, user)).status, 'cancelled')
+	assert.equal((await bookings.cancel(pending.id, user)).status, 'cancelled')
+	const released = await Showtime.findById(showtime.id).select('+holds')
+	assert.equal(released.holds.some((hold) => hold.seats.includes('A2')), false)
+	assert.equal(released.seats.length, 1)
+	await assert.rejects(payments.createOrder(pending.id, user), { status: 409 })
+	const replacement = await bookings.create(user, { showtime: showtime.id, seats: ['A2'] }, crypto.randomUUID())
+	assert.equal(replacement.status, 'pending')
+	// A payment arriving after cancellation must be recorded without taking seats back.
+	await Booking.updateOne({ _id: pending.id }, { $set: { razorpayOrderId: 'order_cancelled' } })
+	remote.id = 'pay_cancelled'
+	remote.order_id = 'order_cancelled'
+	const lateInput = {
+		bookingId: pending.id,
+		razorpay_order_id: remote.order_id,
+		razorpay_payment_id: remote.id,
+		razorpay_signature: crypto.createHmac('sha256', 'test-secret').update(`${remote.order_id}|${remote.id}`).digest('hex')
+	}
+	assert.equal((await payments.verify(user, lateInput)).booking.status, 'cancelled')
+	assert.equal((await payments.verify(user, lateInput)).booking.status, 'cancelled')
+	assert.equal(await Payment.countDocuments({ booking: pending.id }), 1)
+	assert.equal((await Showtime.findById(showtime.id)).seats.length, 1)
 	assert.equal(typeof payments.reconcile, 'undefined')
 	assert.equal(typeof gateway.refund, 'undefined')
 })

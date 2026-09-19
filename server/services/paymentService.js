@@ -65,8 +65,9 @@ async function verify(userId, input) {
 	await mongoose.connection.transaction(async (session) => {
 		const current = await Booking.findById(booking._id).session(session)
 		// Repeated verification returns the same ticket instead of booking twice.
-		if (current.status === 'confirmed' || current.status === 'cancelled') {
-			result = { booking: current, payment: await Payment.findOne({ booking: current._id }).session(session) }
+		const recordedPayment = await Payment.findOne({ booking: current._id }).session(session)
+		if (current.status === 'confirmed' || (current.status === 'cancelled' && recordedPayment)) {
+			result = { booking: current, payment: recordedPayment }
 			return
 		}
 		const payment = new Payment({
