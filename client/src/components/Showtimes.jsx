@@ -80,7 +80,7 @@ const Showtimes = ({ showtimes, movies, selectedDate, filterMovie, showMovieDeta
 														`}
 												className={
 													isPast(new Date(showtime.showtime))
-														? `flex items-center gap-1 rounded-md bg-gradient-to-br from-gray-100 to-white px-2 py-1 text-lg text-gray-900 ring-1 ring-inset ring-gray-800 drop-shadow-sm ${
+														? `flex items-center gap-1 rounded-md bg-[#eeefea] px-2 py-1 text-lg text-[#203b38] ring-1 ring-inset ring-gray-800 drop-shadow-sm ${
 																auth.role !== 'admin' && 'cursor-not-allowed'
 														  } ${
 																auth.role === 'admin' &&
@@ -92,8 +92,8 @@ const Showtimes = ({ showtimes, movies, selectedDate, filterMovie, showMovieDeta
 																	(s) => new Date(s.showtime) > new Date()
 																).showtime
 														  ).getTime()
-														? 'flex items-center gap-1 rounded-md bg-gradient-to-br from-indigo-600 to-blue-500 px-2 py-1 text-lg text-white drop-shadow-sm hover:from-indigo-500 hover:to-blue-400'
-														: 'flex items-center gap-1 rounded-md bg-gradient-to-br from-gray-600 to-gray-500 px-2 py-1 text-lg text-white drop-shadow-sm hover:from-gray-500 hover:to-gray-400'
+														? 'flex items-center gap-1 rounded-md bg-[#31594b] px-2 py-1 text-lg text-white drop-shadow-sm hover:bg-[#436b5b]'
+														: 'flex items-center gap-1 rounded-md bg-[#69766d] px-2 py-1 text-lg text-white drop-shadow-sm hover:bg-[#54766a]'
 												}
 												onClick={() => {
 													if (!isPast(new Date(showtime.showtime)) || auth.role === 'admin')

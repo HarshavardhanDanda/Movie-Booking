@@ -7,7 +7,7 @@ import { AuthContext } from '../context/AuthContext'
 import { loadRazorpay, money } from '../utils/razorpay'
 
 const primary =
-	'w-full rounded-lg bg-indigo-700 px-5 py-3 font-semibold text-white hover:bg-indigo-800 disabled:cursor-not-allowed disabled:opacity-50'
+	'w-full rounded-lg bg-[#203f38] px-5 py-3 font-semibold text-white hover:bg-[#31594b] disabled:cursor-not-allowed disabled:opacity-50'
 
 export default function Checkout() {
 	const { id } = useParams()
@@ -145,7 +145,7 @@ export default function Checkout() {
 				name: 'Movie Booking',
 				description: booking.snapshot.movieName,
 				prefill: { name: auth.username || '', email: auth.email || '' },
-				theme: { color: '#4338ca' },
+				theme: { color: '#203f38' },
 				handler: (payment) => {
 					paymentReturned = true
 					// Keep the response for a verification retry if the connection drops.
@@ -183,12 +183,12 @@ export default function Checkout() {
 	const canPay = booking?.status === 'pending' && !expired && !awaitingVerification
 
 	return (
-		<div className="min-h-screen bg-gradient-to-br from-indigo-900 to-blue-500 pb-12">
+		<div className="min-h-screen bg-[#f4f3ee] pb-12">
 			<Navbar />
 			<main className="mx-auto max-w-4xl px-4 py-8 sm:px-8">
-				<h1 className="mb-6 text-3xl font-bold text-white">{confirmed ? 'Booking confirmed' : 'Checkout'}</h1>
+				<h1 className="mb-6 text-3xl font-bold text-[#203b38]">{confirmed ? 'Booking confirmed' : 'Checkout'}</h1>
 				{loading ? (
-					<p className="text-white" role="status">
+					<p className="text-[#64736b]" role="status">
 						Loading your booking…
 					</p>
 				) : (
@@ -205,10 +205,10 @@ export default function Checkout() {
 						{booking && (
 							<div className="grid gap-8 p-6 sm:p-8 md:grid-cols-2">
 								<section>
-									<p className="mb-2 text-sm font-semibold uppercase tracking-wider text-indigo-600">
+									<p className="mb-2 text-sm font-semibold uppercase tracking-wider text-[#31594b]">
 										Your movie
 									</p>
-									<h2 className="text-2xl font-bold text-gray-900">{booking.snapshot.movieName}</h2>
+									<h2 className="text-2xl font-bold text-[#203b38]">{booking.snapshot.movieName}</h2>
 									<p className="mt-3 text-gray-700">
 										{booking.snapshot.theatreName} · Screen {booking.snapshot.screenNumber}
 									</p>
@@ -223,7 +223,7 @@ export default function Checkout() {
 										{booking.seats.map((seat) => (
 											<span
 												key={seat}
-												className="rounded border border-indigo-200 bg-indigo-50 px-3 py-1 font-semibold text-indigo-800"
+												className="rounded border border-[#cbd7cc] bg-[#e7eedf] px-3 py-1 font-semibold text-[#31594b]"
 											>
 												{seat}
 											</span>
@@ -285,7 +285,7 @@ export default function Checkout() {
 											)}
 											{(awaitingVerification || booking.razorpayOrderId) && (
 												<button
-													className="mt-3 w-full rounded-lg border border-indigo-300 px-4 py-2 font-semibold text-indigo-700 disabled:opacity-50"
+													className="mt-3 w-full rounded-lg border border-[#cbd7cc] px-4 py-2 font-semibold text-[#31594b] disabled:opacity-50"
 													onClick={checkStatus}
 													disabled={busy}
 												>
@@ -295,7 +295,7 @@ export default function Checkout() {
 											{(expired || booking.status === 'cancelled') && !awaitingVerification && (
 												<Link
 													to={`/showtime/${booking.showtime}`}
-													className="mt-4 block text-center font-semibold text-indigo-700"
+													className="mt-4 block text-center font-semibold text-[#31594b]"
 												>
 													Choose seats again
 												</Link>
@@ -319,7 +319,7 @@ export default function Checkout() {
 							</p>
 						)}
 						{!booking && (
-							<Link to="/theatre" className="m-6 inline-block font-semibold text-indigo-700">
+							<Link to="/theatre" className="m-6 inline-block font-semibold text-[#31594b]">
 								Back to theatres
 							</Link>
 						)}

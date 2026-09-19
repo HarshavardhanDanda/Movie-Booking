@@ -127,13 +127,13 @@ const Showtime = () => {
 	})
 
 	return (
-		<div className="flex min-h-screen flex-col gap-4 bg-gradient-to-br from-indigo-900 to-blue-500 pb-8 sm:gap-8">
+		<div className="flex min-h-screen flex-col gap-4 bg-[#f4f3ee] pb-8 sm:gap-8">
 			<Navbar />
-			<div className="mx-4 h-fit rounded-lg bg-gradient-to-br from-indigo-200 to-blue-100 p-4 drop-shadow-xl sm:mx-8 sm:p-6">
+			<div className="mx-4 h-fit rounded-lg bg-white p-4 shadow-sm sm:mx-8 sm:p-6">
 				{showtime.showtime ? (
 					<>
 						<ShowtimeDetails showtime={showtime} showDeleteBtn={true} fetchShowtime={fetchShowtime} />
-						<div className="flex flex-col justify-between rounded-b-lg bg-gradient-to-br from-indigo-100 to-white text-center text-lg drop-shadow-lg md:flex-row">
+						<div className="flex flex-col justify-between rounded-b-lg bg-[#f0f3ec] text-center text-lg shadow-sm md:flex-row">
 							<div className="flex flex-col items-center gap-x-4 px-4 py-2 md:flex-row">
 								{!isPast && <p className="font-semibold">Selected Seats : </p>}
 								<p className="text-start">{sortedSelectedSeat.join(', ')}</p>
@@ -145,7 +145,7 @@ const Showtime = () => {
 								<button
 									onClick={startCheckout}
 									disabled={creatingBooking || !priced || isPast || !showtime.isRelease || selectedSeats.length > 10}
-									className="flex items-center justify-center gap-2 rounded-b-lg bg-gradient-to-br from-indigo-600 to-blue-500 px-4 py-2 font-semibold text-white hover:from-indigo-500 hover:to-blue-500 disabled:opacity-50 md:rounded-none md:rounded-br-lg"
+									className="flex items-center justify-center gap-2 rounded-b-lg bg-[#31594b] px-4 py-2 font-semibold text-white hover:bg-[#436b5b] disabled:opacity-50 md:rounded-none md:rounded-br-lg"
 								>
 									<span>{creatingBooking ? 'Preparing checkout…' : 'Proceed to checkout'}</span>
 									<TicketIcon className="h-7 w-7 text-white" />
@@ -153,18 +153,18 @@ const Showtime = () => {
 							)}
 						</div>
 
-						<p className="mt-3 text-sm text-indigo-950">{priced ? `${money(showtime.ticketPrice)} per ticket · Select up to 10 seats${selectedSeats.length ? ` · Total ${money(showtime.ticketPrice * selectedSeats.length)}` : ''}` : 'Booking will open once the ticket price is set.'}</p>
-						<div className="mx-auto mt-4 flex flex-col items-center rounded-lg bg-gradient-to-br from-indigo-100 to-white p-4 text-center drop-shadow-lg">
+						<p className="mt-3 text-sm text-[#31594b]">{priced ? `${money(showtime.ticketPrice)} per ticket · Select up to 10 seats${selectedSeats.length ? ` · Total ${money(showtime.ticketPrice * selectedSeats.length)}` : ''}` : 'Booking will open once the ticket price is set.'}</p>
+						<div className="mx-auto mt-4 flex flex-col items-center rounded-lg bg-[#f0f3ec] p-4 text-center shadow-sm">
 							<button
 								onClick={() => fetchShowtime()}
 								disabled={refreshing || creatingBooking}
-								className="mb-3 rounded-lg border border-indigo-300 px-4 py-2 font-semibold text-indigo-700 disabled:opacity-50"
+								className="mb-3 rounded-lg border border-[#cbd7cc] px-4 py-2 font-semibold text-[#31594b] disabled:opacity-50"
 							>
 								{refreshing ? 'Refreshing seats...' : 'Refresh seats'}
 							</button>
 							<p className="mb-3 text-sm text-gray-700">White: Available / Blue: Selected / Black: Booked / Orange: On hold</p>
 							<div className="w-full rounded-lg bg-white">
-								<div className="bg-gradient-to-r from-indigo-800 to-blue-700 bg-clip-text text-xl font-bold text-transparent">
+								<div className="bg-[#203f38] bg-clip-text text-xl font-bold text-transparent">
 									Screen
 								</div>
 							</div>
@@ -215,7 +215,7 @@ const Showtime = () => {
 						{auth.role === 'admin' && (
 							<>
 								<h2 className="mt-4 text-2xl font-bold">Booked Seats</h2>
-								<div className="mt-2 flex gap-2 rounded-md bg-gradient-to-br from-indigo-100 to-white p-4">
+								<div className="mt-2 flex gap-2 rounded-md bg-[#f0f3ec] p-4">
 									<div className="flex grow flex-col">
 										<h4 className="text-lg font-bold text-gray-800">Row</h4>
 										<Select
@@ -271,21 +271,21 @@ const Showtime = () => {
 									</div>
 								</div>
 								<div
-									className={`mt-4 grid max-h-screen w-full overflow-auto rounded-md bg-gradient-to-br from-indigo-100 to-white`}
+									className={`mt-4 grid max-h-screen w-full overflow-auto rounded-md bg-[#f0f3ec]`}
 									style={{
 										gridTemplateColumns: 'repeat(4, minmax(max-content, 1fr))'
 									}}
 								>
-									<p className="sticky top-0 bg-gradient-to-br from-gray-800 to-gray-700 px-2 py-1 text-center text-xl font-semibold text-white">
+									<p className="sticky top-0 bg-[#203f38] px-2 py-1 text-center text-xl font-semibold text-white">
 										Seat
 									</p>
-									<p className="sticky top-0 bg-gradient-to-br from-gray-800 to-gray-700 px-2 py-1 text-center text-xl font-semibold text-white">
+									<p className="sticky top-0 bg-[#203f38] px-2 py-1 text-center text-xl font-semibold text-white">
 										Username
 									</p>
-									<p className="sticky top-0 bg-gradient-to-br from-gray-800 to-gray-700 px-2 py-1 text-center text-xl font-semibold text-white">
+									<p className="sticky top-0 bg-[#203f38] px-2 py-1 text-center text-xl font-semibold text-white">
 										Email
 									</p>
-									<p className="sticky top-0 bg-gradient-to-br from-gray-800 to-gray-700 px-2 py-1 text-center text-xl font-semibold text-white">
+									<p className="sticky top-0 bg-[#203f38] px-2 py-1 text-center text-xl font-semibold text-white">
 										Role
 									</p>
 									{filteredSeats
@@ -312,16 +312,16 @@ const Showtime = () => {
 										.map((seat, index) => {
 											return (
 												<Fragment key={index}>
-													<div className="border-t-2 border-indigo-200 px-2 py-1">
+													<div className="border-t-2 border-[#cbd7cc] px-2 py-1">
 														{`${seat.row}${seat.number}`}
 													</div>
-													<div className="border-t-2 border-indigo-200 px-2 py-1">
+													<div className="border-t-2 border-[#cbd7cc] px-2 py-1">
 														{seat.user.username}
 													</div>
-													<div className="border-t-2 border-indigo-200 px-2 py-1">
+													<div className="border-t-2 border-[#cbd7cc] px-2 py-1">
 														{seat.user.email}
 													</div>
-													<div className="border-t-2 border-indigo-200 px-2 py-1">
+													<div className="border-t-2 border-[#cbd7cc] px-2 py-1">
 														{seat.user.role}
 													</div>
 												</Fragment>

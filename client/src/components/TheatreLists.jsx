@@ -60,23 +60,28 @@ const TheatreLists = ({
 			theatresList.map((theatre, index) => {
 				return theatres[selectedTheatreIndex]?._id === theatre._id ? (
 					<button
-						className="w-fit rounded-md bg-gradient-to-br from-indigo-800 to-blue-700 px-2.5 py-1.5 text-lg font-medium text-white drop-shadow-xl hover:from-indigo-700 hover:to-blue-600"
+						className="w-fit rounded-md bg-[#203f38] px-2.5 py-1.5 text-lg font-medium text-white shadow-sm"
 						onClick={() => {
 							setSelectedTheatreIndex(null)
 							sessionStorage.setItem('selectedTheatreIndex', null)
 						}}
-						key={index}
+						aria-pressed={theatres[selectedTheatreIndex]?._id === theatre._id}
+						data-theatre-option
+						key={theatre._id}
 					>
 						{theatre.name}
 					</button>
 				) : (
 					<button
-						className="w-fit rounded-md bg-gradient-to-br from-indigo-800 to-blue-700 px-2 py-1 font-medium text-white drop-shadow-md hover:from-indigo-700 hover:to-blue-600"
+						className="w-fit rounded-md bg-[#203f38] px-2 py-1 font-medium text-white drop-shadow-md"
 						onClick={() => {
-							setSelectedTheatreIndex(index)
-							sessionStorage.setItem('selectedTheatreIndex', index)
+							const theatreIndex = theatres.findIndex((item) => item._id === theatre._id)
+							setSelectedTheatreIndex(theatreIndex)
+							sessionStorage.setItem('selectedTheatreIndex', theatreIndex)
 						}}
-						key={index}
+						aria-pressed={theatres[selectedTheatreIndex]?._id === theatre._id}
+						data-theatre-option
+						key={theatre._id}
 					>
 						{theatre.name}
 					</button>
@@ -89,7 +94,8 @@ const TheatreLists = ({
 
 	return (
 		<>
-			<div className="mx-4 flex h-fit flex-col gap-4 rounded-md bg-gradient-to-br from-indigo-200 to-blue-100 p-4 text-gray-900 drop-shadow-xl sm:mx-8 sm:p-6">
+			<div data-theatre-list
+				className="mx-4 flex h-fit flex-col gap-4 rounded-2xl border border-[#d7ddd5] bg-white p-4 text-[#203b38] shadow-sm sm:mx-8 sm:p-6">
 				<form
 					className="flex flex-wrap items-center justify-between gap-x-4 gap-y-2"
 					onSubmit={handleSubmit(onAddTheatre)}
@@ -105,7 +111,7 @@ const TheatreLists = ({
 							/>
 							<button
 								disabled={isAdding}
-								className="flex items-center whitespace-nowrap rounded-r-md bg-gradient-to-r from-indigo-600 to-blue-500 px-2 py-1 font-medium text-white hover:from-indigo-500 hover:to-blue-400 disabled:from-slate-500 disabled:to-slate-400"
+								className="flex items-center whitespace-nowrap rounded-r-md bg-[#31594b] px-2 py-1 font-medium text-white hover:bg-[#436b5b] disabled:bg-[#87958b]"
 							>
 								{isAdding ? 'Processing...' : 'ADD +'}
 							</button>
@@ -118,7 +124,7 @@ const TheatreLists = ({
 					</div>
 					<input
 						type="search"
-						className="block w-full rounded-lg border border-gray-300 p-2 pl-10 text-gray-900"
+						className="block w-full rounded-lg border border-gray-300 p-2 pl-10 text-[#203b38]"
 						placeholder="Search theatre"
 						{...register('search')}
 					/>

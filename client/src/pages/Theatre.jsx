@@ -1,4 +1,5 @@
 import axios from 'axios'
+import './Theatre.css'
 import { useContext, useEffect, useState } from 'react'
 import 'react-toastify/dist/ReactToastify.css'
 import TheatreLists from '../components/TheatreLists'
@@ -58,10 +59,13 @@ const Theatre = () => {
 		isFetchingTheatres
 	}
 	return (
-		<div className="flex min-h-screen flex-col gap-4 bg-gradient-to-br from-indigo-900 to-blue-500 pb-8 sm:gap-8">
+		<div className="min-h-screen bg-[#f4f3ee] text-[#203b38]">
 			<Navbar />
+			<main className="theatre-page mx-auto flex max-w-7xl flex-col gap-8 px-4 py-10 sm:px-8 sm:py-14">
+			<header className="border-b border-[#d7ddd5] pb-8"><h1 className="text-4xl font-bold tracking-tight sm:text-5xl">Theatres</h1></header>
 			<TheatreLists {...props} />
 			{theatres[selectedTheatreIndex]?.name && <ScreenListsByTheatre {...props} />}
+			</main>
 		</div>
 	)
 }

@@ -1,0 +1,81 @@
+/* Scoped to the Theatre page so shared components keep their other page styles. */
+.theatre-page > div {
+  margin-inline: 0;
+  border: 1px solid #d7ddd5;
+  border-radius: 16px;
+  background: white;
+  color: #203b38;
+  filter: none;
+}
+.theatre-page [class*="bg-gradient-"] { background-image: none; }
+.theatre-page [class~="from-indigo-200"],
+.theatre-page [class~="from-indigo-100"] { background-color: #f0f3ec; }
+.theatre-page [class~="from-indigo-800"],
+.theatre-page [class~="from-indigo-600"],
+.theatre-page [class~="from-gray-900"],
+.theatre-page [class~="from-gray-800"] { background-color: #203f38; }
+.theatre-page [class~="from-gray-600"] { background-color: #69766d; }
+.theatre-page [class~="from-red-700"] { background-color: #a13f35; }
+.theatre-page [class*="drop-shadow"] { filter: none; }
+.theatre-page [class~="text-gray-900"] { color: #203b38; }
+.theatre-page [class~="ring-indigo-800"] { --tw-ring-color: #54766a; }
+.theatre-page [class~="border-indigo-200"] { border-color: #d7ddd5; }
+.theatre-page input:not([type="checkbox"]), .theatre-page select {
+  border: 1px solid #cbd5ca;
+  border-radius: 8px;
+  min-height: 40px;
+  background: #fff;
+  color: #203b38;
+}
+.theatre-page button:focus-visible, .theatre-page input:focus-visible,
+.theatre-page a:focus-visible { outline: 2px solid #54766a; outline-offset: 3px; }
+.theatre-page button:disabled { opacity: .5; cursor: not-allowed; }
+.theatre-page [data-theatre-list] { padding: 24px; background: white; }
+.theatre-page [data-theatre-list] h2 { font-size: 1.25rem; }
+.theatre-page [data-theatre-option] {
+  border: 1px solid #d5dfd6;
+  border-radius: 12px;
+  background: #f4f6f0;
+  color: #315445;
+  padding: 14px 20px;
+  font-size: 1rem;
+  font-weight: 600;
+  text-align: left;
+}
+.theatre-page [data-theatre-option][aria-pressed="true"] {
+  background: #203f38;
+  color: white;
+  border-color: #203f38;
+}
+.theatre-page [data-theatre-option]:hover { border-color: #54766a; }
+.theatre-page > div:not([data-theatre-list]) > div:first-child {
+  border-radius: 15px 15px 0 0;
+  padding: 20px 24px;
+  flex-wrap: wrap;
+}
+.theatre-page img { border-radius: 12px; }
+.theatre-page [data-screen-card] {
+  border: 1px solid #a9bbae;
+  border-radius: 14px;
+  background: #f0f3ec;
+}
+.theatre-page [data-screen-card] > div:first-child {
+  flex-wrap: wrap;
+  gap: 8px;
+  padding: 12px 16px;
+  border-bottom: 1px solid #a9bbae;
+  border-radius: 13px 13px 0 0;
+  background: #203f38;
+}
+.theatre-page [data-screen-card] > div:first-child > h3,
+.theatre-page [data-screen-card] > div:first-child > div {
+  border-radius: 0;
+  padding-inline: 0;
+}
+.theatre-page [data-screen-card] > div:last-child {
+  border-radius: 0 0 13px 13px;
+}
+@media (max-width: 640px) {
+  .theatre-page [data-theatre-list] { padding: 16px; }
+  .theatre-page [data-theatre-option] { flex: 1 1 140px; }
+}

@@ -8,7 +8,7 @@ export default function TicketPriceField({ register }) {
 				step="0.01"
 				required
 				placeholder="150.00"
-				className="h-9 w-32 rounded border border-gray-300 bg-white px-2 py-1 text-gray-900"
+				className="h-9 w-32 rounded border border-gray-300 bg-white px-2 py-1 text-[#203b38]"
 				{...register('ticketPrice', { required: true, min: 1, valueAsNumber: true })}
 			/>
 		</label>

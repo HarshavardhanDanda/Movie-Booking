@@ -51,13 +51,13 @@ const ScreenShort = ({ screenId, movies, selectedDate, filterMovie, rounded = fa
 
 	return (
 		<div
-			className={`flex flex-col bg-gradient-to-br from-indigo-100 to-white sm:flex-row sm:rounded-tr-none ${
+			className={`flex flex-col bg-[#f0f3ec] sm:flex-row sm:rounded-tr-none ${
 				rounded && 'rounded-b-md'
 			}`}
 		>
 			<div className="flex flex-col sm:flex-row">
 				<div
-					className={`flex min-w-[120px] flex-row items-center justify-center gap-x-2 bg-gradient-to-br from-gray-800 to-gray-700 px-4 py-0.5 text-2xl font-bold text-white sm:flex-col ${
+					className={`flex min-w-[120px] flex-row items-center justify-center gap-x-2 bg-[#203f38] px-4 py-0.5 text-2xl font-bold text-white sm:flex-col ${
 						rounded && 'sm:rounded-bl-md'
 					}`}
 				>
@@ -66,7 +66,7 @@ const ScreenShort = ({ screenId, movies, selectedDate, filterMovie, rounded = fa
 				</div>
 				{auth.role === 'admin' && (
 					<div
-						className={`flex w-full min-w-[160px] flex-row justify-center gap-x-4 border-b-2 border-indigo-200 bg-gradient-to-br from-indigo-100 to-white px-4 py-0.5 text-sm font-bold sm:w-fit sm:flex-col sm:border-none`}
+						className={`flex w-full min-w-[160px] flex-row justify-center gap-x-4 border-b-2 border-[#cbd7cc] bg-[#f0f3ec] px-4 py-0.5 text-sm font-bold sm:w-fit sm:flex-col sm:border-none`}
 					>
 						<div className="flex items-center gap-2">
 							<ArrowsUpDownIcon className="h-5 w-5" />

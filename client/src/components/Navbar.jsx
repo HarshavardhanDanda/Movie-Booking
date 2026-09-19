@@ -56,10 +56,10 @@ const Navbar = () => {
 				<div className="flex flex-col gap-2 lg:flex-row">
 					<Link
 						to={'/theatre'}
-						className={`flex items-center justify-center gap-2 rounded-md px-2 py-1 text-white hover:bg-gray-500 ${
+						className={`flex items-center justify-center gap-2 rounded-md px-2 py-1 text-white hover:bg-[#436b5b] ${
 							window.location.pathname === '/theatre'
-								? 'bg-gradient-to-br from-indigo-800 to-blue-700'
-								: 'bg-gray-600'
+								? 'bg-[#54766a]'
+								: 'bg-transparent'
 						}`}
 					>
 						<HomeModernIcon className="h-6 w-6" />
@@ -67,10 +67,10 @@ const Navbar = () => {
 					</Link>
 					<Link
 						to={'/schedule'}
-						className={`flex items-center justify-center gap-2 rounded-md px-2 py-1 text-white hover:bg-gray-500 ${
+						className={`flex items-center justify-center gap-2 rounded-md px-2 py-1 text-white hover:bg-[#436b5b] ${
 							window.location.pathname === '/schedule'
-								? 'bg-gradient-to-br from-indigo-800 to-blue-700'
-								: 'bg-gray-600'
+								? 'bg-[#54766a]'
+								: 'bg-transparent'
 						}`}
 					>
 						<ClockIcon className="h-6 w-6" />
@@ -79,10 +79,10 @@ const Navbar = () => {
 					{auth.role && (
 						<Link
 							to={'/ticket'}
-							className={`flex items-center justify-center gap-2 rounded-md px-2 py-1 text-white hover:bg-gray-500 ${
+							className={`flex items-center justify-center gap-2 rounded-md px-2 py-1 text-white hover:bg-[#436b5b] ${
 								window.location.pathname === '/ticket'
-									? 'bg-gradient-to-br from-indigo-800 to-blue-700'
-									: 'bg-gray-600'
+									? 'bg-[#54766a]'
+									: 'bg-transparent'
 							}`}
 						>
 							<TicketIcon className="h-6 w-6" />
@@ -93,10 +93,10 @@ const Navbar = () => {
 						<>
 							<Link
 								to={'/movie'}
-								className={`flex items-center justify-center gap-2 rounded-md px-2 py-1 text-white hover:bg-gray-500 ${
+								className={`flex items-center justify-center gap-2 rounded-md px-2 py-1 text-white hover:bg-[#436b5b] ${
 									window.location.pathname === '/movie'
-										? 'bg-gradient-to-br from-indigo-800 to-blue-700'
-										: 'bg-gray-600'
+										? 'bg-[#54766a]'
+										: 'bg-transparent'
 								}`}
 							>
 								<VideoCameraIcon className="h-6 w-6" />
@@ -104,10 +104,10 @@ const Navbar = () => {
 							</Link>
 							<Link
 								to={'/search'}
-								className={`flex items-center justify-center gap-2 rounded-md px-2 py-1 text-white hover:bg-gray-500 ${
+								className={`flex items-center justify-center gap-2 rounded-md px-2 py-1 text-white hover:bg-[#436b5b] ${
 									window.location.pathname === '/search'
-										? 'bg-gradient-to-br from-indigo-800 to-blue-700'
-										: 'bg-gray-600'
+										? 'bg-[#54766a]'
+										: 'bg-transparent'
 								}`}
 							>
 								<MagnifyingGlassIcon className="h-6 w-6" />
@@ -115,10 +115,10 @@ const Navbar = () => {
 							</Link>
 							<Link
 								to={'/user'}
-								className={`flex items-center justify-center gap-2 rounded-md px-2 py-1 text-white hover:bg-gray-500 ${
+								className={`flex items-center justify-center gap-2 rounded-md px-2 py-1 text-white hover:bg-[#436b5b] ${
 									window.location.pathname === '/user'
-										? 'bg-gradient-to-br from-indigo-800 to-blue-700'
-										: 'bg-gray-600'
+										? 'bg-[#54766a]'
+										: 'bg-transparent'
 								}`}
 							>
 								<UsersIcon className="h-6 w-6" />
@@ -133,14 +133,14 @@ const Navbar = () => {
 					)}
 					{auth.token ? (
 						<button
-							className="rounded-lg bg-gradient-to-br from-indigo-600 to-blue-500 px-2 py-1 text-white drop-shadow-md hover:from-indigo-500 hover:to-blue-400 disabled:from-slate-500 disabled:to-slate-400"
+							className="rounded-lg bg-[#31594b] px-2 py-1 text-white drop-shadow-md hover:bg-[#436b5b] disabled:bg-[#87958b]"
 							onClick={() => onLogout()}
 							disabled={isLoggingOut}
 						>
 							{isLoggingOut ? 'Processing...' : 'Logout'}
 						</button>
 					) : (
-						<button className="rounded-lg bg-gradient-to-br from-indigo-600 to-blue-500 px-2 py-1 text-white drop-shadow-md hover:from-indigo-500 hover:to-blue-400">
+						<button className="rounded-lg bg-[#31594b] px-2 py-1 text-white drop-shadow-md hover:bg-[#436b5b]">
 							<Link to={'/login'}>Login</Link>
 						</button>
 					)}
@@ -150,14 +150,14 @@ const Navbar = () => {
 	}
 
 	return (
-		<nav className="flex flex-col items-center justify-between gap-2 bg-gray-900 px-4 py-3 drop-shadow-lg lg:flex-row lg:justify-start sm:px-8">
+		<nav className="flex flex-col items-center justify-between gap-2 bg-[#203f38] px-4 py-3 shadow-sm lg:flex-row lg:justify-start sm:px-8">
 			<div className="flex w-full flex-row justify-between lg:w-fit">
 				<button className="flex flex-row items-center gap-2" onClick={() => navigate('/')}>
 					<FilmIcon className="h-8 w-8 text-white" />
 					<h1 className="mr-2 text-xl text-white">Movie Booking</h1>
 				</button>
 				<button
-					className="flex h-8 w-8 items-center justify-center rounded hover:bg-gray-700 lg:hidden"
+					className="flex h-8 w-8 items-center justify-center rounded hover:bg-[#436b5b] lg:hidden"
 					onClick={() => toggleMenu()}
 				>
 					<Bars3Icon className="h-6 w-6 text-white" />

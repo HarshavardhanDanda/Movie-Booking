@@ -81,7 +81,7 @@ const ScheduleTable = ({ theatre, selectedDate }) => {
 			<div
 				className={`grid min-h-[50vh] max-h-screen overflow-x-auto grid-cols-${theatre.screens?.length.toString()} grid-rows-${
 					gridRows + shiftEnd
-				} rounded-md bg-gradient-to-br from-indigo-100 to-white`}
+				} rounded-md bg-[#f0f3ec]`}
 				{...events}
 				ref={ref}
 			>
@@ -164,7 +164,7 @@ const ScheduleTable = ({ theatre, selectedDate }) => {
 				{theatre.screens.map((screen, index) => (
 					<div
 						key={index}
-						className="sticky top-0 row-span-1 row-start-1 flex flex-col items-center justify-center bg-gradient-to-br from-gray-800 to-gray-700 py-1 text-white"
+						className="sticky top-0 row-span-1 row-start-1 flex flex-col items-center justify-center bg-[#203f38] py-1 text-white"
 					>
 						<p className="text-2xl font-semibold leading-7">{index + 1}</p>
 						{auth.role === 'admin' && (

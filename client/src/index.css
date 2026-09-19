@@ -15,7 +15,33 @@
 }
 
 body {
-	min-width: 350px; /* Suppose you want minimum width of 1000px */
-	width: auto !important; /* Firefox will set width as auto */
-	width: 350px; /* As IE6 ignores !important it will set width as 1000px; */
+  min-width: 320px;
+  margin: 0;
+  background: #f4f3ee;
+  color: #203b38;
 }
+
+button:focus-visible, a:focus-visible, input:focus-visible, select:focus-visible {
+  outline: 2px solid #54766a;
+  outline-offset: 3px;
+}
+
+[data-screen-card] {
+  border: 1px solid #a9bbae;
+  border-radius: 14px;
+  background: #f0f3ec;
+}
+[data-screen-card] > div:first-child {
+  flex-wrap: wrap;
+  gap: 8px;
+  padding: 12px 16px;
+  border-bottom: 1px solid #a9bbae;
+  border-radius: 13px 13px 0 0;
+  background: #203f38;
+}
+[data-screen-card] > div:first-child > h3,
+[data-screen-card] > div:first-child > div {
+  border-radius: 0;
+  padding-inline: 0;
+}
+[data-screen-card] > div:last-child { border-radius: 0 0 13px 13px; }

@@ -149,7 +149,11 @@ const Search = () => {
 				response = await axios.get('/showtime')
 			}
 			// console.log(response.data.data)
-			setShowtimes(response.data.data)
+			setShowtimes(
+				response.data.data.filter(
+					(showtime) => showtime.screen?.theatre && showtime.movie
+				)
+			)
 		} catch (error) {
 			console.error(error)
 		} finally {
@@ -311,13 +315,13 @@ const Search = () => {
 	const navigate = useNavigate()
 
 	return (
-		<div className="flex min-h-screen flex-col gap-4 bg-gradient-to-br from-indigo-900 to-blue-500 pb-8 text-gray-900 sm:gap-8">
+		<div className="flex min-h-screen flex-col gap-4 bg-[#f4f3ee] pb-8 text-[#203b38] sm:gap-8">
 			<Navbar />
-			<div className="mx-4 flex h-fit flex-col gap-2 rounded-lg bg-gradient-to-br from-indigo-200 to-blue-100 p-4 drop-shadow-xl sm:mx-8 sm:p-6">
-				<h2 className="text-3xl font-bold text-gray-900">Search Showtimes</h2>
-				<div className="flex flex-col gap-2 rounded-md bg-gradient-to-br from-indigo-100 to-white p-4 transition-all duration-500 ease-in-out">
+			<div className="mx-4 flex h-fit flex-col gap-2 rounded-lg bg-white p-4 shadow-sm sm:mx-8 sm:p-6">
+				<h2 className="text-3xl font-bold text-[#203b38]">Search Showtimes</h2>
+				<div className="flex flex-col gap-2 rounded-md bg-[#f0f3ec] p-4 transition-all duration-500 ease-in-out">
 					<div className="flex items-center justify-between" onClick={() => setIsOpenFilter((prev) => !prev)}>
-						<div className="flex items-center gap-2 text-2xl font-bold text-gray-900">
+						<div className="flex items-center gap-2 text-2xl font-bold text-[#203b38]">
 							<FunnelIcon className="h-6 w-6" />
 							Filter
 						</div>
@@ -650,7 +654,7 @@ const Search = () => {
 					<ArrowDownIcon className="h-8 min-h-[32px] w-8 min-w-[32px] px-1" />
 					<div className="flex flex-wrap items-center gap-2 px-1">
 						<button
-							className="flex w-fit items-center justify-center gap-1 rounded bg-gradient-to-r from-indigo-600 to-blue-500 py-1 pl-2 pr-1.5 text-sm font-medium text-white hover:from-indigo-500 hover:to-blue-400 disabled:from-slate-500 disabled:to-slate-400 md:min-w-fit"
+							className="flex w-fit items-center justify-center gap-1 rounded bg-[#31594b] py-1 pl-2 pr-1.5 text-sm font-medium text-white hover:bg-[#436b5b] disabled:bg-[#87958b] md:min-w-fit"
 							onClick={() => handleReleaseCheckedShowtimes()}
 							disabled={checkedShowtimes.length === 0 || isReleasingCheckedShowtimes}
 						>
@@ -664,7 +668,7 @@ const Search = () => {
 							)}
 						</button>
 						<button
-							className="flex w-fit items-center justify-center gap-1 rounded bg-gradient-to-r from-indigo-600 to-blue-500 py-1 pl-2 pr-1.5 text-sm font-medium text-white hover:from-indigo-500 hover:to-blue-400 disabled:from-slate-500 disabled:to-slate-400 md:min-w-fit"
+							className="flex w-fit items-center justify-center gap-1 rounded bg-[#31594b] py-1 pl-2 pr-1.5 text-sm font-medium text-white hover:bg-[#436b5b] disabled:bg-[#87958b] md:min-w-fit"
 							onClick={() => handleUnreleasedCheckedShowtimes()}
 							disabled={checkedShowtimes.length === 0 || isUnreleasingCheckedShowtimes}
 						>
@@ -678,7 +682,7 @@ const Search = () => {
 							)}
 						</button>
 						<button
-							className="flex w-fit items-center justify-center gap-1 rounded bg-gradient-to-r from-red-700 to-rose-600 py-1 pl-2 pr-1.5 text-sm font-medium text-white hover:from-red-600 hover:to-rose-500 disabled:from-slate-500 disabled:to-slate-400 md:min-w-fit"
+							className="flex w-fit items-center justify-center gap-1 rounded bg-[#a13f35] py-1 pl-2 pr-1.5 text-sm font-medium text-white hover:bg-[#87362e] disabled:bg-[#87958b] md:min-w-fit"
 							onClick={() => handleDeleteCheckedShowtimes()}
 							disabled={checkedShowtimes.length === 0 || isDeletingCheckedShowtimes}
 						>
@@ -702,10 +706,10 @@ const Search = () => {
 				</div>
 
 				<div
-					className={`mb-4 grid max-h-screen overflow-auto rounded-md bg-gradient-to-br from-indigo-100 to-white`}
+					className={`mb-4 grid max-h-screen overflow-auto rounded-md bg-[#f0f3ec]`}
 					style={{ gridTemplateColumns: '34px repeat(7, minmax(max-content, 1fr)) 104px' }}
 				>
-					<p className="sticky top-0 flex items-center justify-center rounded-tl-md bg-gradient-to-br from-gray-800 to-gray-700 text-center text-xl font-semibold text-white">
+					<p className="sticky top-0 flex items-center justify-center rounded-tl-md bg-[#203f38] text-center text-xl font-semibold text-white">
 						<input
 							type="checkbox"
 							className="h-6 w-6"
@@ -726,7 +730,7 @@ const Search = () => {
 						/>
 					</p>
 					<button
-						className="sticky top-0 flex justify-center bg-gradient-to-br from-gray-800 to-gray-700 hover:from-gray-700 hover:to-gray-600 px-2 py-1 text-center text-xl font-semibold text-white"
+						className="sticky top-0 flex justify-center bg-[#203f38] hover:from-gray-700 hover:to-gray-600 px-2 py-1 text-center text-xl font-semibold text-white"
 						onClick={() => {
 							let prevValue = sortTheatre
 							resetSort()
@@ -739,7 +743,7 @@ const Search = () => {
 						{sortTheatre === -1 && <ChevronDownIcon className="ml-auto w-6 h-6" />}
 					</button>
 					<button
-						className="sticky top-0 flex justify-center bg-gradient-to-br from-gray-800 to-gray-700 hover:from-gray-700 hover:to-gray-600 px-2 py-1 text-center text-xl font-semibold text-white"
+						className="sticky top-0 flex justify-center bg-[#203f38] hover:from-gray-700 hover:to-gray-600 px-2 py-1 text-center text-xl font-semibold text-white"
 						onClick={() => {
 							let prevValue = sortScreen
 							resetSort()
@@ -752,7 +756,7 @@ const Search = () => {
 						{sortScreen === -1 && <ChevronDownIcon className="ml-auto w-6 h-6" />}
 					</button>
 					<button
-						className="sticky top-0 flex justify-center bg-gradient-to-br from-gray-800 to-gray-700 hover:from-gray-700 hover:to-gray-600 px-2 py-1 text-center text-xl font-semibold text-white"
+						className="sticky top-0 flex justify-center bg-[#203f38] hover:from-gray-700 hover:to-gray-600 px-2 py-1 text-center text-xl font-semibold text-white"
 						onClick={() => {
 							let prevValue = sortMovie
 							resetSort()
@@ -765,7 +769,7 @@ const Search = () => {
 						{sortMovie === -1 && <ChevronDownIcon className="ml-auto w-6 h-6" />}
 					</button>
 					<button
-						className="sticky top-0 flex justify-center bg-gradient-to-br from-gray-800 to-gray-700 hover:from-gray-700 hover:to-gray-600 px-2 py-1 text-center text-xl font-semibold text-white"
+						className="sticky top-0 flex justify-center bg-[#203f38] hover:from-gray-700 hover:to-gray-600 px-2 py-1 text-center text-xl font-semibold text-white"
 						onClick={() => {
 							let prevValue = sortDate
 							resetSort()
@@ -778,7 +782,7 @@ const Search = () => {
 						{sortDate === -1 && <ChevronDownIcon className="ml-auto w-6 h-6" />}
 					</button>
 					<button
-						className="sticky top-0 flex justify-center bg-gradient-to-br from-gray-800 to-gray-700 hover:from-gray-700 hover:to-gray-600 px-2 py-1 text-center text-xl font-semibold text-white"
+						className="sticky top-0 flex justify-center bg-[#203f38] hover:from-gray-700 hover:to-gray-600 px-2 py-1 text-center text-xl font-semibold text-white"
 						onClick={() => {
 							let prevValue = sortTime
 							resetSort()
@@ -791,7 +795,7 @@ const Search = () => {
 						{sortTime === -1 && <ChevronDownIcon className="ml-auto w-6 h-6" />}
 					</button>
 					<button
-						className="sticky top-0 flex justify-center bg-gradient-to-br from-gray-800 to-gray-700 hover:from-gray-700 hover:to-gray-600 px-2 py-1 text-center text-xl font-semibold text-white"
+						className="sticky top-0 flex justify-center bg-[#203f38] hover:from-gray-700 hover:to-gray-600 px-2 py-1 text-center text-xl font-semibold text-white"
 						onClick={() => {
 							let prevValue = sortBooked
 							resetSort()
@@ -804,7 +808,7 @@ const Search = () => {
 						{sortBooked === -1 && <ChevronDownIcon className="ml-auto w-6 h-6" />}
 					</button>
 					<button
-						className="sticky top-0 flex justify-center bg-gradient-to-br from-gray-800 to-gray-700 hover:from-gray-700 hover:to-gray-600 px-2 py-1 text-center text-xl font-semibold text-white"
+						className="sticky top-0 flex justify-center bg-[#203f38] hover:from-gray-700 hover:to-gray-600 px-2 py-1 text-center text-xl font-semibold text-white"
 						onClick={() => {
 							let prevValue = sortRelease
 							resetSort()
@@ -816,7 +820,7 @@ const Search = () => {
 						{sortRelease === 1 && <ChevronUpIcon className="ml-auto w-6 h-6" />}
 						{sortRelease === -1 && <ChevronDownIcon className="ml-auto w-6 h-6" />}
 					</button>
-					<p className="sticky top-0 z-[1] flex items-center justify-center gap-2 rounded-tr-md bg-gradient-to-br from-gray-800 to-gray-700 px-2 py-1 text-center text-xl font-semibold text-white">
+					<p className="sticky top-0 z-[1] flex items-center justify-center gap-2 rounded-tr-md bg-[#203f38] px-2 py-1 text-center text-xl font-semibold text-white">
 						<MapIcon className="h-6 w-6" />
 						View
 					</p>
@@ -832,7 +836,7 @@ const Search = () => {
 							return (
 								<Fragment key={index}>
 									<div
-										className={`flex items-center justify-center border-t-2 border-indigo-200 ${
+										className={`flex items-center justify-center border-t-2 border-[#cbd7cc] ${
 											isCheckedRow && 'border-white bg-blue-200 text-blue-800'
 										}`}
 									>
@@ -852,45 +856,45 @@ const Search = () => {
 										/>
 									</div>
 									<div
-										className={`border-t-2 border-indigo-200 px-2 py-1 ${
+										className={`border-t-2 border-[#cbd7cc] px-2 py-1 ${
 											isCheckedRow && 'border-white bg-blue-200 text-blue-800'
 										}`}
 									>
 										{showtime.screen.theatre.name}
 									</div>
 									<div
-										className={`border-t-2 border-indigo-200 px-2 py-1 ${
+										className={`border-t-2 border-[#cbd7cc] px-2 py-1 ${
 											isCheckedRow && 'border-white bg-blue-200 text-blue-800'
 										}`}
 									>
 										{showtime.screen.number}
 									</div>
 									<div
-										className={`border-t-2 border-indigo-200 px-2 py-1 ${
+										className={`border-t-2 border-[#cbd7cc] px-2 py-1 ${
 											isCheckedRow && 'border-white bg-blue-200 text-blue-800'
 										}`}
 									>
 										{showtime.movie.name}
 									</div>
 									<div
-										className={`border-t-2 border-indigo-200 px-2 py-1 ${
+										className={`border-t-2 border-[#cbd7cc] px-2 py-1 ${
 											isCheckedRow && 'border-white bg-blue-200 text-blue-800'
 										}`}
 									>{`${day} ${month} ${year}`}</div>
 									<div
-										className={`border-t-2 border-indigo-200 px-2 py-1 ${
+										className={`border-t-2 border-[#cbd7cc] px-2 py-1 ${
 											isCheckedRow && 'border-white bg-blue-200 text-blue-800'
 										}`}
 									>{`${hours} : ${minutes}`}</div>
 									<div
-										className={`border-t-2 border-indigo-200 px-2 py-1 ${
+										className={`border-t-2 border-[#cbd7cc] px-2 py-1 ${
 											isCheckedRow && 'border-white bg-blue-200 text-blue-800'
 										}`}
 									>
 										{showtime.seats.length}
 									</div>
 									<div
-										className={`flex items-center gap-2 border-t-2 border-indigo-200 px-2 py-1 ${
+										className={`flex items-center gap-2 border-t-2 border-[#cbd7cc] px-2 py-1 ${
 											isCheckedRow && 'border-white bg-blue-200 text-blue-800'
 										}`}
 									>
@@ -903,7 +907,7 @@ const Search = () => {
 										)}
 									</div>
 									<button
-										className="flex items-center justify-center gap-2 bg-gradient-to-br from-indigo-600 to-blue-500 px-2 py-1 text-white drop-shadow-md hover:from-indigo-500 hover:to-blue-400 disabled:from-slate-500 disabled:to-slate-400"
+										className="flex items-center justify-center gap-2 bg-[#31594b] px-2 py-1 text-white drop-shadow-md hover:bg-[#436b5b] disabled:bg-[#87958b]"
 										onClick={() => navigate(`/showtime/${showtime._id}`)}
 									>
 										<MapIcon className="h-6 w-6" />

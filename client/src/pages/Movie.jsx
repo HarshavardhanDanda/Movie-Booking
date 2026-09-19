@@ -108,13 +108,13 @@ const Movie = () => {
 	const min = sumMin % 60
 
 	return (
-		<div className="flex min-h-screen flex-col gap-4 bg-gradient-to-br from-indigo-900 to-blue-500 pb-8 text-gray-900 sm:gap-8">
+		<div className="flex min-h-screen flex-col gap-4 bg-[#f4f3ee] pb-8 text-[#203b38] sm:gap-8">
 			<Navbar />
-			<div className="mx-4 flex h-fit flex-col gap-4 rounded-md bg-gradient-to-br from-indigo-200 to-blue-100 p-4 drop-shadow-xl sm:mx-8 sm:p-6">
-				<h2 className="text-3xl font-bold text-gray-900">Movie Lists</h2>
+			<div className="mx-4 flex h-fit flex-col gap-4 rounded-2xl border border-[#d7ddd5] bg-white p-4 shadow-sm sm:mx-8 sm:p-6">
+				<h2 className="text-3xl font-bold text-[#203b38]">Movie Lists</h2>
 				<form
 					onSubmit={handleSubmit(onAddMovie)}
-					className="flex flex-col items-stretch justify-end gap-x-4 gap-y-2 rounded-md bg-gradient-to-br from-indigo-100 to-white p-4 drop-shadow-md lg:flex-row"
+					className="flex flex-col items-stretch justify-end gap-x-4 gap-y-2 rounded-md bg-[#f0f3ec] p-4 drop-shadow-md lg:flex-row"
 				>
 					<div className="flex w-full grow flex-col flex-wrap justify-start gap-4 lg:w-auto">
 						<h3 className="text-xl font-bold">Add Movie</h3>
@@ -174,7 +174,7 @@ const Movie = () => {
 							<img src={watch('img')} className="h-48 rounded-md object-contain drop-shadow-md lg:h-64" />
 						)}
 						<button
-							className="w-full min-w-fit items-center rounded-md bg-gradient-to-br from-indigo-600 to-blue-500 px-2 py-1 text-center font-medium text-white drop-shadow-md hover:from-indigo-500 hover:to-blue-500 disabled:from-slate-500 disabled:to-slate-400 lg:w-24 xl:w-32 xl:text-xl"
+							className="w-full min-w-fit items-center rounded-md bg-[#31594b] px-2 py-1 text-center font-medium text-white drop-shadow-md hover:bg-[#436b5b] disabled:bg-[#87958b] lg:w-24 xl:w-32 xl:text-xl"
 							type="submit"
 							disabled={isAddingMovie}
 						>
@@ -188,7 +188,7 @@ const Movie = () => {
 					</div>
 					<input
 						type="search"
-						className="block w-full rounded-lg border border-gray-300 p-2 pl-10 text-gray-900"
+						className="block w-full rounded-lg border border-gray-300 p-2 pl-10 text-[#203b38]"
 						placeholder="Search movie"
 						{...register('search')}
 					/>

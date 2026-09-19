@@ -3,7 +3,7 @@ import Loading from './Loading'
 
 const NowShowing = ({ movies, selectedMovieIndex, setSelectedMovieIndex, auth, isFetchingMoviesDone }) => {
 	return (
-		<div className="mx-4 flex flex-col rounded-md bg-gradient-to-br from-indigo-200 to-blue-100 p-4 text-gray-900 drop-shadow-md sm:mx-8 sm:p-6">
+		<div className="mx-4 flex flex-col rounded-2xl border border-[#d7ddd5] bg-white p-4 text-[#203b38] shadow-sm sm:mx-8 sm:p-6">
 			<h2 className="text-3xl font-bold">Now Showing</h2>
 			{isFetchingMoviesDone ? (
 				movies.length ? (
@@ -14,34 +14,36 @@ const NowShowing = ({ movies, selectedMovieIndex, setSelectedMovieIndex, auth, i
 									<div
 										key={index}
 										title={movie.name}
-										className="flex w-[108px] flex-col rounded-md bg-gradient-to-br from-indigo-600 to-blue-500 p-1 text-white drop-shadow-md hover:from-indigo-500 hover:to-blue-400 sm:w-[144px]"
+										className="flex w-[150px] flex-col rounded-xl border border-[#31594b] bg-[#31594b] p-2 text-white shadow-sm hover:bg-[#436b5b] sm:w-[190px]"
 										onClick={() => {
 											setSelectedMovieIndex(null)
 											sessionStorage.setItem('selectedMovieIndex', null)
 										}}
 									>
 										<img
+											alt={movie.name}
 											src={movie.img}
-											className="h-36 rounded-md object-cover drop-shadow-md sm:h-48"
+											className="h-52 rounded-md object-cover shadow-sm sm:h-64"
 										/>
-										<p className="truncate pt-1 text-center text-sm font-semibold leading-4">
+										<p className="break-words px-1 py-3 text-center text-sm font-semibold leading-4">
 											{movie.name}
 										</p>
 									</div>
 								) : (
 									<div
 										key={index}
-										className="flex w-[108px] flex-col rounded-md bg-white p-1 drop-shadow-md hover:bg-gradient-to-br hover:from-indigo-500 hover:to-blue-400 hover:text-white sm:w-[144px]"
+										className="flex w-[150px] flex-col rounded-2xl border border-[#d7ddd5] bg-white p-2 shadow-sm hover:bg-[#436b5b] hover:text-white sm:w-[190px]"
 										onClick={() => {
 											setSelectedMovieIndex(index)
 											sessionStorage.setItem('selectedMovieIndex', index)
 										}}
 									>
 										<img
+											alt={movie.name}
 											src={movie.img}
-											className="h-36 rounded-md object-cover drop-shadow-md sm:h-48"
+											className="h-52 rounded-md object-cover shadow-sm sm:h-64"
 										/>
-										<p className="truncate pt-1 text-center text-sm font-semibold leading-4">
+										<p className="break-words px-1 py-3 text-center text-sm font-semibold leading-4">
 											{movie.name}
 										</p>
 									</div>

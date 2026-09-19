@@ -164,17 +164,17 @@ const Schedule = () => {
 	}
 
 	return (
-		<div className="flex min-h-screen flex-col gap-4 bg-gradient-to-br from-indigo-900 to-blue-500 pb-8 text-gray-900 sm:gap-8">
+		<div className="flex min-h-screen flex-col gap-4 bg-[#f4f3ee] pb-8 text-[#203b38] sm:gap-8">
 			<Navbar />
 			<TheatreLists {...props} />
 			{selectedTheatreIndex !== null &&
 				(theatres[selectedTheatreIndex]?.screens?.length ? (
-					<div className="mx-4 flex flex-col gap-2 rounded-lg bg-gradient-to-br from-indigo-200 to-blue-100 p-4 drop-shadow-xl sm:mx-8 sm:gap-4 sm:p-6">
-						<h2 className="text-3xl font-bold text-gray-900">Schedule</h2>
+					<div className="mx-4 flex flex-col gap-2 rounded-lg bg-white p-4 shadow-sm sm:mx-8 sm:gap-4 sm:p-6">
+						<h2 className="text-3xl font-bold text-[#203b38]">Schedule</h2>
 						<DateSelector selectedDate={selectedDate} setSelectedDate={setSelectedDate} />
 						{auth.role === 'admin' && (
 							<form
-								className="flex flex-col lg:flex-row gap-4 rounded-md bg-gradient-to-br from-indigo-100 to-white p-4"
+								className="flex flex-col lg:flex-row gap-4 rounded-md bg-[#f0f3ec] p-4"
 								onSubmit={handleSubmit(onAddShowtime)}
 							>
 								<div className="flex grow flex-col gap-2 rounded-lg">
@@ -184,7 +184,7 @@ const Schedule = () => {
 												Screen:
 											</label>
 											<select
-												className="h-9 w-full rounded bg-white px-2 py-1 font-semibold text-gray-900 drop-shadow-sm"
+												className="h-9 w-full rounded bg-white px-2 py-1 font-semibold text-[#203b38] drop-shadow-sm"
 												required
 												{...register('screen', { required: true })}
 											>
@@ -228,7 +228,7 @@ const Schedule = () => {
 											</label>
 											<input
 												type="time"
-												className="h-9 w-full rounded bg-white px-2 py-1 font-semibold text-gray-900 drop-shadow-sm"
+												className="h-9 w-full rounded bg-white px-2 py-1 font-semibold text-[#203b38] drop-shadow-sm"
 												required
 												{...register('showtime', { required: true })}
 											/>
@@ -244,7 +244,7 @@ const Schedule = () => {
 												min={1}
 												defaultValue={1}
 												max={31}
-												className="h-9 w-full rounded bg-white px-2 py-1 font-semibold text-gray-900 drop-shadow-sm"
+												className="h-9 w-full rounded bg-white px-2 py-1 font-semibold text-[#203b38] drop-shadow-sm"
 												required
 												{...register('repeat', { required: true, valueAsNumber: true })}
 											/>
@@ -291,7 +291,7 @@ const Schedule = () => {
 											<label className="whitespace-nowrap font-semibold leading-5">Gap:</label>
 											<input
 												type="time"
-												className="h-9 w-full rounded bg-white px-2 py-1 font-semibold text-gray-900 drop-shadow-sm disabled:bg-gray-300"
+												className="h-9 w-full rounded bg-white px-2 py-1 font-semibold text-[#203b38] drop-shadow-sm disabled:bg-gray-300"
 												disabled={!watch('autoIncrease')}
 												{...register('gap')}
 											/>
@@ -332,7 +332,7 @@ const Schedule = () => {
 								<button
 									title="Add showtime"
 									disabled={isAddingShowtime}
-									className="whitespace-nowrap rounded-md bg-gradient-to-r from-indigo-600 to-blue-500 px-2 py-1 font-medium text-white drop-shadow-md hover:from-indigo-500 hover:to-blue-400 disabled:from-slate-500 disabled:to-slate-400"
+									className="whitespace-nowrap rounded-md bg-[#31594b] px-2 py-1 font-medium text-white drop-shadow-md hover:bg-[#436b5b] disabled:bg-[#87958b]"
 									type="submit"
 								>
 									ADD +
@@ -355,7 +355,7 @@ const Schedule = () => {
 						)}
 					</div>
 				) : (
-					<div className="mx-4 flex flex-col gap-2 rounded-lg bg-gradient-to-br from-indigo-200 to-blue-100 p-4 drop-shadow-xl sm:mx-8 sm:gap-4 sm:p-6">
+					<div className="mx-4 flex flex-col gap-2 rounded-lg bg-white p-4 shadow-sm sm:mx-8 sm:gap-4 sm:p-6">
 						<p className="text-center">There are no screens available</p>
 					</div>
 				))}

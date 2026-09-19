@@ -41,14 +41,14 @@ const Register = () => {
 	}
 
 	const inputClasses = () => {
-		return 'appearance-none rounded-md block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 focus:outline-none focus:border-blue-500'
+		return 'appearance-none rounded-md block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-[#203b38] focus:outline-none focus:border-[#54766a]'
 	}
 
 	return (
-		<div className="flex min-h-screen items-center justify-center bg-gradient-to-br from-indigo-900 to-blue-500 py-12 px-4 sm:px-6 lg:px-8">
-			<div className="w-full max-w-md space-y-8 rounded-2xl bg-white p-4 shadow-xl">
+		<div className="flex min-h-screen items-center justify-center bg-[#f4f3ee] py-12 px-4 sm:px-6 lg:px-8">
+			<div className="w-full max-w-md space-y-8 rounded-2xl border border-[#d7ddd5] bg-white p-8 shadow-sm">
 				<div>
-					<h2 className="mt-4 text-center text-4xl font-extrabold text-gray-900">Register</h2>
+					<h2 className="mt-4 text-center text-4xl font-extrabold text-[#203b38]">Register</h2>
 				</div>
 				<form className="mt-8 space-y-4" onSubmit={handleSubmit(onSubmit)}>
 					<input
@@ -88,7 +88,7 @@ const Register = () => {
 						{errorsMessage && <span className="text-sm text-red-500">{errorsMessage}</span>}
 						<button
 							type="submit"
-							className="mt-4 w-full rounded-md bg-blue-600 bg-gradient-to-br from-indigo-600 to-blue-500 py-2 px-4 font-medium text-white drop-shadow-md hover:bg-blue-700 hover:from-indigo-500 hover:to-blue-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 disabled:from-slate-500 disabled:to-slate-400"
+							className="mt-4 w-full rounded-md bg-[#31594b] py-2 px-4 font-medium text-white drop-shadow-md hover:bg-[#436b5b] focus:outline-none focus:ring-2 focus:ring-[#54766a] focus:ring-offset-2 disabled:bg-[#87958b]"
 							disabled={isRegistering}
 						>
 							{isRegistering ? 'Processing...' : 'Register'}
@@ -96,7 +96,7 @@ const Register = () => {
 					</div>
 					<p className="text-right">
 						Already have an account?{' '}
-						<Link to={'/login'} className="font-bold text-blue-600">
+						<Link to={'/login'} className="font-bold text-[#31594b]">
 							Login here
 						</Link>
 					</p>

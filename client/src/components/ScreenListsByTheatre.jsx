@@ -195,15 +195,15 @@ const ScreenListsByTheatre = ({ theatres, selectedTheatreIndex, setSelectedTheat
 	}
 
 	return (
-		<div className="mx-4 h-fit rounded-md bg-gradient-to-br from-indigo-200 to-blue-100 text-gray-900 drop-shadow-md sm:mx-8">
-			<div className="flex items-center justify-center gap-2 rounded-t-md bg-gradient-to-br from-gray-900 to-gray-800 px-2 py-1.5 text-center text-2xl font-semibold text-white sm:py-2">
+		<div className="mx-4 h-fit rounded-2xl border border-[#d7ddd5] bg-white text-[#203b38] drop-shadow-md sm:mx-8">
+			<div className="flex items-center justify-center gap-2 rounded-t-md bg-[#203f38] px-2 py-1.5 text-center text-2xl font-semibold text-white sm:py-2">
 				{isEditing ? (
 					<input
 						title="Theatre name"
 						type="text"
 						required
 						autoFocus
-						className={`flex-grow rounded border border-white bg-gradient-to-br from-gray-900 to-gray-800 px-1 text-center text-2xl font-semibold drop-shadow-sm sm:text-3xl ${
+						className={`flex-grow rounded border border-white bg-[#203f38] px-1 text-center text-2xl font-semibold drop-shadow-sm sm:text-3xl ${
 							errorsName.name && 'border-2 border-red-500'
 						}`}
 						{...registerName('name', { required: true })}
@@ -217,7 +217,7 @@ const ScreenListsByTheatre = ({ theatres, selectedTheatreIndex, setSelectedTheat
 							<form onClick={handleSubmitName(onEditTheatre)}>
 								<button
 									title="Save theatre name"
-									className="flex w-fit items-center gap-1 rounded-md bg-gradient-to-r from-indigo-600 to-blue-500  py-1 pl-2 pr-1.5 text-sm font-medium text-white hover:from-indigo-500 hover:to-blue-400"
+									className="flex w-fit items-center gap-1 rounded-md bg-[#31594b]  py-1 pl-2 pr-1.5 text-sm font-medium text-white hover:bg-[#436b5b]"
 									onClick={() => {
 										SetIsEditing(false)
 									}}
@@ -229,7 +229,7 @@ const ScreenListsByTheatre = ({ theatres, selectedTheatreIndex, setSelectedTheat
 						) : (
 							<button
 								title="Edit theatre name"
-								className="flex w-fit items-center gap-1 rounded-md bg-gradient-to-r from-indigo-600 to-blue-500  py-1 pl-2 pr-1.5 text-sm font-medium text-white hover:from-indigo-500 hover:to-blue-400"
+								className="flex w-fit items-center gap-1 rounded-md bg-[#31594b]  py-1 pl-2 pr-1.5 text-sm font-medium text-white hover:bg-[#436b5b]"
 								onClick={() => SetIsEditing(true)}
 							>
 								EDIT
@@ -239,7 +239,7 @@ const ScreenListsByTheatre = ({ theatres, selectedTheatreIndex, setSelectedTheat
 						<button
 							title="Delete theatre"
 							disabled={isDeleting}
-							className="flex w-fit items-center gap-1 rounded-md bg-gradient-to-r from-red-700 to-rose-600 py-1 pl-2 pr-1.5 text-sm font-medium text-white hover:from-red-600 hover:to-rose-600 disabled:from-slate-500 disabled:to-slate-400"
+							className="flex w-fit items-center gap-1 rounded-md bg-[#a13f35] py-1 pl-2 pr-1.5 text-sm font-medium text-white hover:bg-[#87362e] disabled:bg-[#87958b]"
 							onClick={() => handleDelete(theatres[selectedTheatreIndex])}
 						>
 							{isDeleting ? (
@@ -259,7 +259,7 @@ const ScreenListsByTheatre = ({ theatres, selectedTheatreIndex, setSelectedTheat
 				<form className="flex flex-col gap-4" onSubmit={handleSubmit(onIncreaseScreen)}>
 					<h2 className="text-3xl font-bold">Screens</h2>
 					{auth.role === 'admin' && (
-						<div className="flex w-full flex-wrap justify-between gap-4 rounded-md bg-gradient-to-br from-indigo-100 to-white p-4">
+						<div className="flex w-full flex-wrap justify-between gap-4 rounded-md bg-[#f0f3ec] p-4">
 							<h3 className="flex items-center text-xl font-bold">Add Screen</h3>
 							<div className="flex grow flex-col gap-4 sm:justify-end md:flex-row">
 								<div className="flex flex-wrap justify-end gap-4">
@@ -306,7 +306,7 @@ const ScreenListsByTheatre = ({ theatres, selectedTheatreIndex, setSelectedTheat
 									</div>
 								</div>
 								<div className="flex grow md:grow-0">
-									<div className="flex flex-col items-center justify-center gap-1 rounded-l bg-gradient-to-br from-gray-800 to-gray-700 p-1 text-white">
+									<div className="flex flex-col items-center justify-center gap-1 rounded-l bg-[#203f38] p-1 text-white">
 										<label className="text-xs font-semibold leading-3">Number</label>
 										<label className="text-2xl font-semibold leading-5">
 											{theatres[selectedTheatreIndex].screens.length + 1}
@@ -315,7 +315,7 @@ const ScreenListsByTheatre = ({ theatres, selectedTheatreIndex, setSelectedTheat
 									<button
 										title="Add screen"
 										disabled={isIncreasing}
-										className="flex grow items-center justify-center whitespace-nowrap rounded-r bg-gradient-to-r from-indigo-600 to-blue-500 px-2 py-1 font-medium text-white drop-shadow-md hover:from-indigo-500 hover:to-blue-400 disabled:from-slate-500 disabled:to-slate-400 md:grow-0"
+										className="flex grow items-center justify-center whitespace-nowrap rounded-r bg-[#31594b] px-2 py-1 font-medium text-white drop-shadow-md hover:bg-[#436b5b] disabled:bg-[#87958b] md:grow-0"
 										type="submit"
 									>
 										{isIncreasing ? 'Processing...' : 'ADD +'}
@@ -340,7 +340,7 @@ const ScreenListsByTheatre = ({ theatres, selectedTheatreIndex, setSelectedTheat
 					<div className="flex justify-center">
 						<button
 							title="Delete last screen"
-							className="w-fit rounded-md bg-gradient-to-r from-red-700 to-rose-600 px-2 py-1 font-medium text-white drop-shadow-md hover:from-red-600 hover:to-rose-500 disabled:from-slate-500 disabled:to-slate-400"
+							className="w-fit rounded-md bg-[#a13f35] px-2 py-1 font-medium text-white drop-shadow-md hover:bg-[#87362e] disabled:bg-[#87958b]"
 							onClick={() => handleDecreaseScreen()}
 							disabled={isDecreasing}
 						>
