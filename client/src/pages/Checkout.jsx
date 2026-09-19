@@ -198,7 +198,13 @@ export default function Checkout() {
 								<CheckCircleIcon className="h-8 w-8" />
 								<div>
 									<p className="font-bold">Your tickets are booked!</p>
-									<p className="text-sm">See you at the movies.</p>
+									<p className="mt-1 text-sm">
+										{booking.confirmationEmailStatus === 'sent'
+											? 'Confirmation email sent to your registered email address.'
+											: booking.confirmationEmailStatus === 'failed'
+												? 'Email could not be sent. Your tickets are confirmed and available in My Tickets.'
+												: 'Your tickets are available in My Tickets. Email confirmation is pending.'}
+									</p>
 								</div>
 							</div>
 						)}

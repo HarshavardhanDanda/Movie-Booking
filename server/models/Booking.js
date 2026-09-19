@@ -39,6 +39,8 @@ const bookingSchema = new mongoose.Schema(
 			required: true
 		},
 		expiresAt: { type: Date, required: true, default: () => new Date(Date.now() + 5 * 60 * 1000) },
+		confirmationEmailStatus: { type: String, enum: ['pending', 'sending', 'sent', 'failed'], default: 'pending' },
+		confirmationEmailSentAt: Date,
 		confirmedAt: Date,
 		cancelledAt: Date
 	},
