@@ -14,7 +14,6 @@ const ScheduleTable = ({ theatre, selectedDate }) => {
 		showtime = new Date(showtime)
 		const hour = showtime.getHours()
 		const min = showtime.getMinutes()
-		console.log(hour, min, Math.round((60 * hour + min) / 5))
 		return Math.round((60 * hour + min) / 5)
 	}
 
@@ -81,7 +80,7 @@ const ScheduleTable = ({ theatre, selectedDate }) => {
 			<div
 				className={`grid min-h-[50vh] max-h-screen overflow-x-auto grid-cols-${theatre.screens?.length.toString()} grid-rows-${
 					gridRows + shiftEnd
-				} rounded-md bg-[#f0f3ec]`}
+				} rounded-xl border border-[#cbd7cc] bg-[#f4f3ee]`}
 				{...events}
 				ref={ref}
 			>
@@ -113,13 +112,13 @@ const ScheduleTable = ({ theatre, selectedDate }) => {
 										showtime.movie.length
 									)} row-start-${
 										getRowStart(showtime.showtime) - firstRowStart + shiftStart
-									} col-start-${screen.number} mx-1 rounded p-1 text-center drop-shadow-md ${
+									} col-start-${screen.number} mx-1 rounded-lg border border-[#cbd7cc] border-l-4 p-3 text-center shadow-sm ${
 										!isPast(new Date(showtime.showtime))
-											? 'bg-white hover:bg-gray-100'
-											: `bg-gray-200  ${
-													auth.role === 'admin' ? 'hover:bg-gray-300' : 'cursor-not-allowed'
+											? 'border-l-[#31594b] bg-[#e7eedf] text-[#203f38] hover:bg-[#dce7d6]'
+											: `border-l-[#9ba69a] bg-[#eeefea] text-[#64736b] ${
+													auth.role === 'admin' ? 'hover:bg-[#e1e5dc]' : 'cursor-not-allowed'
 											  }`
-									} ${!showtime.isRelease && 'ring-2 ring-inset ring-gray-800'}`}
+									} ${!showtime.isRelease && 'ring-2 ring-inset ring-[#b36a36]'}`}
 									onClick={() => {
 										if (!isPast(new Date(showtime.showtime)) || auth.role === 'admin')
 											return navigate(`/showtime/${showtime._id}`)
@@ -132,7 +131,7 @@ const ScheduleTable = ({ theatre, selectedDate }) => {
 										/>
 									)}
 									<p className="text-sm font-bold">{showtime.movie.name}</p>
-									<p className="text-sm leading-3">{`${new Date(showtime.showtime)
+									<p className="mt-2 text-xs leading-relaxed">{`${new Date(showtime.showtime)
 										.getHours()
 										.toString()
 										.padStart(2, '0')} : ${new Date(showtime.showtime)
@@ -164,9 +163,9 @@ const ScheduleTable = ({ theatre, selectedDate }) => {
 				{theatre.screens.map((screen, index) => (
 					<div
 						key={index}
-						className="sticky top-0 row-span-1 row-start-1 flex flex-col items-center justify-center bg-[#203f38] py-1 text-white"
+						className="sticky top-0 z-10 border-r border-[#54766a] row-span-1 row-start-1 flex flex-col items-center justify-center bg-[#203f38] px-3 py-3 text-white"
 					>
-						<p className="text-2xl font-semibold leading-7">{index + 1}</p>
+						<p className="text-2xl font-semibold leading-7">Screen {screen.number}</p>
 						{auth.role === 'admin' && (
 							<>
 								<div className="flex gap-1 text-xs">

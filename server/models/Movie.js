@@ -7,6 +7,12 @@ const movieSchema = new mongoose.Schema(
 			required: [true, 'Please add a movie name'],
 			trim: true
 		},
+		description: {
+			type: String,
+			trim: true,
+			default: '',
+			maxlength: [2000, 'Description must be 2000 characters or fewer']
+		},
 		length: {
 			type: Number,
 			required: [true, 'Please add a movie length']

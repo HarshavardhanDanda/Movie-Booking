@@ -1,3 +1,4 @@
+import './Screen.css'
 import TicketPriceField from './TicketPriceField'
 import { ArrowsRightLeftIcon, ArrowsUpDownIcon, InformationCircleIcon, UserIcon } from '@heroicons/react/24/outline'
 import axios from 'axios'
@@ -54,7 +55,7 @@ const Screen = ({ screenId, movies, selectedDate, filterMovie, setSelectedDate }
 	}, [screenId])
 
 	useEffect(() => {
-		setValue('autoIncrease', true)
+		setValue('autoIncrease', false)
 		setValue('rounding5', true)
 		setValue('gap', '00:10')
 	}, [])
@@ -183,14 +184,21 @@ const Screen = ({ screenId, movies, selectedDate, filterMovie, setSelectedDate }
 				)}
 			</div>
 			<div className="flex flex-col gap-4 rounded-b-md rounded-tr-md bg-[#f0f3ec] py-4 md:rounded-tr-none">
+				<Showtimes
+					showtimes={screen.showtimes}
+					movies={movies}
+					selectedDate={selectedDate}
+					filterMovie={filterMovie}
+				/>
 				{auth.role === 'admin' && (
 					<>
 						<form
-							className="mx-4 flex flex-col gap-x-4 gap-y-2 lg:flex-row"
+							className="showtime-form mx-4"
 							onSubmit={handleSubmit(onAddShowtime)}
 						>
-							<div className="flex grow flex-col gap-2 rounded-lg">
-								<div className="flex flex-col gap-2 rounded-lg lg:flex-row lg:items-stretch">
+							<div className="flex min-w-0 flex-col gap-3">
+								<h4 className="text-base font-semibold text-[#203f38]">Showtime details</h4>
+								<div className="showtime-fields">
 									<div className="flex grow-[2] items-center gap-x-2 gap-y-1 lg:flex-col lg:items-start">
 										<label className="whitespace-nowrap text-lg font-semibold leading-5">
 											Movie:
@@ -206,10 +214,12 @@ const Screen = ({ screenId, movies, selectedDate, filterMovie, setSelectedDate }
 												setSelectedMovie(value)
 											}}
 											isSearchable={true}
-											primaryColor="indigo"
+											primaryColor="teal"
 											classNames={{
-												menuButton: (value) =>
-													'flex font-semibold text-sm border border-gray-300 rounded shadow-sm transition-all duration-300 focus:outline-none bg-white hover:border-gray-400 focus:border-indigo-500 focus:ring focus:ring-indigo-500/20'
+												searchBox: 'movie-search-input w-full text-sm',
+												listItem: ({ isSelected }) => `block cursor-pointer rounded-lg px-3 py-2 text-sm ${isSelected ? 'bg-[#203f38] text-white' : 'text-[#203b38] hover:bg-[#e7eedf]'}`,
+											menuButton: () =>
+												'flex px-3 font-semibold text-sm border border-gray-300 rounded shadow-sm focus:outline-none bg-white hover:border-gray-400 focus:border-[#54766a] focus:ring focus:ring-[#54766a]/20'
 											}}
 										/>
 									</div>
@@ -225,7 +235,7 @@ const Screen = ({ screenId, movies, selectedDate, filterMovie, setSelectedDate }
 										/>
 									</div>
 								</div>
-								<div className="flex flex-col gap-2 rounded-lg lg:flex-row lg:items-stretch">
+								<div className="showtime-fields">
 									<div className="flex items-center gap-x-2 gap-y-1 lg:flex-col lg:items-start">
 										<label className="whitespace-nowrap text-lg font-semibold leading-5">
 											Repeat (Day):
@@ -249,8 +259,12 @@ const Screen = ({ screenId, movies, selectedDate, filterMovie, setSelectedDate }
 											{...register('isRelease')}
 										/>
 									</label>
+									</div>
+								<section className="scheduling-options">
+									<h4 className="mb-2 text-base font-semibold text-[#203f38]">Scheduling options(Optional)</h4>
+									<div className="showtime-fields">
 									<div className="flex flex-col items-start gap-2 lg:flex-row lg:items-end">
-										<p className="font-semibold text-right underline">Auto increase</p>
+										<p className="text-sm font-semibold text-[#64736b]">Auto increase</p>
 										<label
 											className="flex items-center gap-x-2 gap-y-1 whitespace-nowrap font-semibold leading-5 lg:flex-col lg:items-start"
 											title="After add, update showtime value to the movie ending time"
@@ -288,7 +302,7 @@ const Screen = ({ screenId, movies, selectedDate, filterMovie, setSelectedDate }
 										/>
 									</div>
 									<div className="flex flex-col items-start gap-2 lg:flex-row lg:items-end">
-										<p className="font-semibold text-right underline">Rounding</p>
+										<p className="text-sm font-semibold text-[#64736b]">Rounding</p>
 										<label
 											className="flex items-center gap-x-2 gap-y-1 whitespace-nowrap font-semibold leading-5 lg:flex-col lg:items-start"
 											title="Rounding up to the nearest five minutes"
@@ -319,14 +333,15 @@ const Screen = ({ screenId, movies, selectedDate, filterMovie, setSelectedDate }
 										</label>
 									</div>
 								</div>
+								</section>
 							</div>
 							<button
 								title="Add showtime"
 								disabled={isAddingShowtime}
-								className="whitespace-nowrap rounded-md bg-[#31594b] px-2 py-1 font-medium text-white drop-shadow-md hover:bg-[#436b5b] disabled:bg-[#87958b]"
+								className="justify-self-end rounded-lg bg-[#31594b] px-6 py-3 font-semibold text-white hover:bg-[#436b5b] disabled:bg-[#87958b]"
 								type="submit"
 							>
-								ADD +
+								{isAddingShowtime ? 'Adding...' : 'Add showtime'}
 							</button>
 						</form>
 						{filterMovie?.name && (
@@ -337,12 +352,7 @@ const Screen = ({ screenId, movies, selectedDate, filterMovie, setSelectedDate }
 						)}
 					</>
 				)}
-				<Showtimes
-					showtimes={screen.showtimes}
-					movies={movies}
-					selectedDate={selectedDate}
-					filterMovie={filterMovie}
-				/>
+
 			</div>
 		</div>
 	)

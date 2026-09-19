@@ -123,7 +123,7 @@ exports.getMovie = async (req, res, next) => {
 //@access   Private
 exports.createMovie = async (req, res, next) => {
 	try {
-		const movie = await Movie.create(catalog.pick(req.body, ['name', 'length', 'img']))
+		const movie = await Movie.create(catalog.pick(req.body, ['name', 'length', 'img', 'description']))
 		res.status(201).json({
 			success: true,
 			data: movie
@@ -138,7 +138,7 @@ exports.createMovie = async (req, res, next) => {
 //@access   Private Admin
 exports.updateMovie = async (req, res, next) => {
 	try {
-		const movie = await Movie.findByIdAndUpdate(req.params.id, catalog.pick(req.body, ['name', 'length', 'img']), {
+		const movie = await Movie.findByIdAndUpdate(req.params.id, catalog.pick(req.body, ['name', 'length', 'img', 'description']), {
 			new: true,
 			runValidators: true
 		})

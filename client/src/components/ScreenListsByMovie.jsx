@@ -108,11 +108,14 @@ const ScreenListsByMovie = ({ movies, selectedMovieIndex, setSelectedMovieIndex,
 					<div className="flex flex-col gap-4 rounded-md bg-[#f0f3ec] py-4">
 						<div className="flex items-center">
 							<img src={movies[selectedMovieIndex].img} className="w-32 px-4 drop-shadow-md" />
-							<div>
+							<div className="min-w-0 pr-4">
 								<h4 className="text-2xl font-semibold">{movies[selectedMovieIndex].name}</h4>
 								<p className="text-md font-medium">
 									length : {movies[selectedMovieIndex].length || '-'} min
 								</p>
+								{movies[selectedMovieIndex].description && (
+									<p className="mt-3 whitespace-pre-line break-words text-sm leading-relaxed text-[#64736b]">{movies[selectedMovieIndex].description}</p>
+								)}
 							</div>
 						</div>
 					</div>

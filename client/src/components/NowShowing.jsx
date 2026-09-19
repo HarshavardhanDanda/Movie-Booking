@@ -7,7 +7,7 @@ const NowShowing = ({ movies, selectedMovieIndex, setSelectedMovieIndex, auth, i
 			<h2 className="text-3xl font-bold">Now Showing</h2>
 			{isFetchingMoviesDone ? (
 				movies.length ? (
-					<div className="mt-1 overflow-x-auto sm:mt-3">
+					<div className="mt-1 overflow-x-auto cursor-pointer sm:mt-3">
 						<div className="mx-auto flex w-fit gap-4">
 							{movies?.map((movie, index) => {
 								return movies[selectedMovieIndex]?._id === movie._id ? (

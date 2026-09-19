@@ -1,6 +1,6 @@
 import { MagnifyingGlassIcon } from '@heroicons/react/24/outline'
 import axios from 'axios'
-import { useContext, useEffect, useState } from 'react'
+import { useContext, useEffect, useRef, useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { toast } from 'react-toastify'
 import Loading from '../components/Loading'
@@ -18,6 +18,8 @@ const Movie = () => {
 		formState: { errors }
 	} = useForm()
 
+	const formRef = useRef(null)
+	const [editingMovieId, setEditingMovieId] = useState(null)
 	const [movies, setMovies] = useState([])
 	const [isFetchingMoviesDone, setIsFetchingMoviesDone] = useState(false)
 	const [isAddingMovie, SetIsAddingMovie] = useState(false)
@@ -27,7 +29,6 @@ const Movie = () => {
 			setIsFetchingMoviesDone(false)
 			const response = await axios.get('/movie')
 			// console.log(response.data.data)
-			reset()
 			setMovies(response.data.data)
 		} catch (error) {
 			console.error(error)
@@ -40,25 +41,43 @@ const Movie = () => {
 		fetchMovies()
 	}, [])
 
+	const cancelEdit = () => {
+		setEditingMovieId(null)
+		reset({ name: '', img: '', description: '', lengthHr: '', lengthMin: '', search: watch('search') || '' })
+	}
+
+	const handleEdit = (movie) => {
+		if (isAddingMovie) return
+		setEditingMovieId(movie._id)
+		reset({ name: movie.name, img: movie.img, description: movie.description || '', lengthHr: Math.floor(movie.length / 60), lengthMin: movie.length % 60, search: watch('search') || '' })
+		formRef.current?.scrollIntoView({ block: 'start' })
+		formRef.current?.querySelector('input[name="name"]')?.focus({ preventScroll: true })
+	}
+
 	const onAddMovie = async (data) => {
+		if (isAddingMovie) return
 		try {
 			data.length = (parseInt(data.lengthHr) || 0) * 60 + (parseInt(data.lengthMin) || 0)
 			SetIsAddingMovie(true)
-			const response = await axios.post('/movie', data, {
+			const response = await axios({
+				method: editingMovieId ? 'put' : 'post',
+				url: editingMovieId ? `/movie/${editingMovieId}` : '/movie',
+				data: { name: data.name, img: data.img, description: data.description, length: data.length },
 				headers: {
 					Authorization: `Bearer ${auth.token}`
 				}
 			})
 			// console.log(response.data)
-			fetchMovies()
-			toast.success('Add movie successful!', {
+			setMovies((current) => editingMovieId ? current.map((movie) => movie._id === editingMovieId ? response.data.data : movie) : [response.data.data, ...current])
+			toast.success(editingMovieId ? 'Movie updated' : 'Movie added', {
 				position: 'top-center',
 				autoClose: 2000,
 				pauseOnHover: false
 			})
+			cancelEdit()
 		} catch (error) {
 			console.error(error)
-			toast.error('Error', {
+			toast.error('Unable to save changes. Please try again.', {
 				position: 'top-center',
 				autoClose: 2000,
 				pauseOnHover: false
@@ -85,6 +104,7 @@ const Movie = () => {
 				}
 			})
 			// console.log(response.data)
+			if (editingMovieId === id) cancelEdit()
 			fetchMovies()
 			toast.success('Delete movie successful!', {
 				position: 'top-center',
@@ -113,11 +133,15 @@ const Movie = () => {
 			<div className="mx-4 flex h-fit flex-col gap-4 rounded-2xl border border-[#d7ddd5] bg-white p-4 shadow-sm sm:mx-8 sm:p-6">
 				<h2 className="text-3xl font-bold text-[#203b38]">Movie Lists</h2>
 				<form
+					ref={formRef}
 					onSubmit={handleSubmit(onAddMovie)}
 					className="flex flex-col items-stretch justify-end gap-x-4 gap-y-2 rounded-md bg-[#f0f3ec] p-4 drop-shadow-md lg:flex-row"
 				>
 					<div className="flex w-full grow flex-col flex-wrap justify-start gap-4 lg:w-auto">
-						<h3 className="text-xl font-bold">Add Movie</h3>
+						<div className="flex items-center justify-between gap-4">
+							<h3 className="text-xl font-bold">{editingMovieId ? 'Edit Movie' : 'Add Movie'}</h3>
+							{editingMovieId && <button type="button" disabled={isAddingMovie} onClick={cancelEdit} className="rounded-lg border border-[#cbd7cc] px-3 py-2 text-sm font-semibold disabled:opacity-50">Cancel edit</button>}
+						</div>
 						<div className="flex flex-col items-start gap-2 sm:flex-row sm:items-center">
 							<label className="text-lg font-semibold leading-5">Name :</label>
 							<input
@@ -128,6 +152,17 @@ const Movie = () => {
 									required: true
 								})}
 							/>
+						</div>
+						<div className="flex flex-col gap-2">
+							<label htmlFor="movie-description" className="text-lg font-semibold leading-5">Description (optional):</label>
+							<textarea
+								id="movie-description"
+								rows={4}
+								maxLength={2000}
+								className="w-full resize-y rounded-lg border border-[#cbd7cc] bg-white px-3 py-2 text-[#203b38]"
+								{...register('description', { maxLength: 2000 })}
+							/>
+							<p className="text-right text-xs text-[#64736b]">{watch('description')?.length || 0}/2000</p>
 						</div>
 						<div className="flex flex-col items-start gap-2 sm:flex-row sm:items-center">
 							<label className="text-lg font-semibold leading-5">Poster URL :</label>
@@ -178,7 +213,7 @@ const Movie = () => {
 							type="submit"
 							disabled={isAddingMovie}
 						>
-							{isAddingMovie ? 'Processing...' : 'ADD +'}
+							{isAddingMovie ? 'Saving...' : editingMovieId ? 'Save changes' : 'ADD +'}
 						</button>
 					</div>
 				</form>
@@ -194,7 +229,7 @@ const Movie = () => {
 					/>
 				</div>
 				{isFetchingMoviesDone ? (
-					<MovieLists movies={movies} search={watch('search')} handleDelete={handleDelete} />
+					<MovieLists movies={movies} search={watch('search')} handleDelete={handleDelete} handleEdit={handleEdit} busy={isAddingMovie} />
 				) : (
 					<Loading />
 				)}

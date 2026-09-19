@@ -1,6 +1,6 @@
-import { TrashIcon } from '@heroicons/react/24/solid'
+import { PencilSquareIcon, TrashIcon } from '@heroicons/react/24/solid'
 
-const MovieLists = ({ movies, search, handleDelete }) => {
+const MovieLists = ({ movies, search, handleDelete, handleEdit, busy }) => {
 	const moviesList = movies?.filter((movie) => movie.name.toLowerCase().includes(search?.toLowerCase() || ''))
 
 	return !!moviesList.length ? (
@@ -14,13 +14,18 @@ const MovieLists = ({ movies, search, handleDelete }) => {
 								<p className="text-lg font-semibold sm:text-xl">{movie.name}</p>
 								<p>length : {movie.length || '-'} min.</p>
 							</div>
-							<button
+							<div className="mt-3 flex flex-wrap justify-end gap-2">
+								<button type="button" disabled={busy} onClick={() => handleEdit(movie)} className="flex items-center gap-1 rounded-md bg-[#31594b] px-2 py-1 text-sm font-medium text-white disabled:opacity-50">
+									Edit <PencilSquareIcon className="h-5 w-5" />
+								</button>
+							<button disabled={busy}
 								className="flex w-fit items-center gap-1 self-end rounded-md bg-[#a13f35] py-1 pl-2 pr-1.5 text-sm font-medium text-white hover:bg-[#87362e]"
 								onClick={() => handleDelete(movie)}
 							>
 								DELETE
 								<TrashIcon className="h-5 w-5" />
 							</button>
+							</div>
 						</div>
 					</div>
 				)

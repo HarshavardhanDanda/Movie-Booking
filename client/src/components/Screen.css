@@ -1,0 +1,80 @@
+.showtime-form {
+  display: grid;
+  gap: 12px;
+  padding: 12px;
+  border: 1px solid #d7ddd5;
+  border-radius: 12px;
+  background: #fff;
+}
+.showtime-fields {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 12px;
+  align-items: start;
+}
+.showtime-fields > div,
+.showtime-fields > label {
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  gap: 6px;
+}
+.showtime-form label { font-size: 14px; line-height: 1.5; }
+.showtime-form input:not([type="checkbox"]) {
+  width: 100%;
+  min-height: 42px;
+  border: 1px solid #cbd7cc;
+  border-radius: 8px;
+  padding: 8px 12px;
+  font-size: 14px;
+}
+.showtime-form input[type="checkbox"] {
+  width: 18px;
+  height: 18px;
+  flex-shrink: 0;
+  accent-color: #31594b;
+}
+.showtime-form input:disabled { background: #eeefea; color: #64736b; }
+/* Leave room for the dropdown's search icon, including on the Theatre page. */
+.showtime-form input.movie-search-input:not([type="checkbox"]) {
+  padding-left: 36px;
+}
+.scheduling-options {
+  padding: 12px;
+  border: 1px solid #d7ddd5;
+  border-radius: 10px;
+  background: #f4f6f0;
+}
+.scheduling-options .showtime-fields { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+.scheduling-options label {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+@media (max-width: 640px) {
+  .showtime-form, .scheduling-options { padding: 12px; }
+  .showtime-fields, .scheduling-options .showtime-fields { grid-template-columns: minmax(0, 1fr); }
+}
+
+@media (min-width: 1024px) {
+  .showtime-form > div > .showtime-fields { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+  .showtime-form > div > .showtime-fields:first-of-type { grid-template-columns: 2fr 1fr; }
+  .scheduling-options .showtime-fields { max-width: 760px; }
+}
+
+.showtime-form select {
+  width: 100%;
+  min-height: 42px;
+  border: 1px solid #cbd7cc;
+  border-radius: 8px;
+  padding: 8px 12px;
+  font-size: 14px;
+}
+@media (min-width: 1024px) {
+  .schedule-showtime-form > div > .showtime-fields:first-of-type {
+    grid-template-columns: 1fr 2fr 1fr;
+  }
+}
