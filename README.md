@@ -1,363 +1,270 @@
-<h1 align="center">Cinema-Booking</h1>
+# Movie Booking
 
-Movie ticket booking web application with MERN stack (MongoDB, Express, React, NodeJS) & Tailwind CSS
+A MERN movie ticket booking application with theatre and screen management, seat reservations, Razorpay checkout, Google sign-in, and booking confirmation emails.
 
-Demo: https://cinema-booking-client.vercel.app/
+## Features
 
-## Table of Contents
-* [Project Purpose](#project-purpose)
-* [Technologies](#technologies)
-* [Quick Tour](#quick-tour)
-* [Guide](#guide)
-* [How to run the app](#how-to-run-the-app)
+### Customers
 
-## Project Purpose
-The purpose of this project is to improve my full-stack web development skills, learning front-end technologies like React and Tailwind CSS, and backend technologies like Node.js, Express, and MongoDB.
+- Browse movies and descriptions, theatres, screens, and daily schedules.
+- Register and log in with a username/password or Google.
+- Select up to 10 seats and reserve them during checkout.
+- Pay through Razorpay and receive a confirmation email.
+- Cancel an unconfirmed booking to release its seat hold.
+- View purchased tickets, with upcoming shows first and expired tickets styled separately.
 
-## Technologies
-* React v18.2.0
-* React Router Dom v6.14.2
-* React Hook Form v7.45.4
-* Tailwind CSS v3.3.3
-* Vite v4.4.8
-* NodeJS
-* Mongoose v7.4.2
-* Express v4.18.2
-* MongoDB
-* And more...
+### Administrators
+
+- Create, edit, and delete movies, including descriptions, posters, and duration.
+- Manage theatres and screen seating layouts.
+- Create showtimes with ticket prices, daily repetition, and release controls.
+- Optionally prepare the next showtime using movie duration, a gap, and rounding.
+- View schedules by screen and time, search showtimes, and inspect booked seats.
+- Manage users and assign admin roles.
 
 ## Quick Tour
-<h2 align="center">Home Page 🎥</h2>
+
+<h3 align="center">Home</h3>
+
 <p align="center">
-    <img src="./images/screenshot1.png" width="600">
+  <img src="./images/initial-screen%28no%20login%29.png" alt="Home" width="800">
 </p>
 
-<h2 align="center">Responsive Design 📱</h2>
+<h3 align="center">Register and Login</h3>
+
 <p align="center">
-    <img src="./images/screenshot2.png" width="180">
+  <img src="./images/Register-screen.png" alt="Register and Login - screenshot 1" width="800">
 </p>
 
-<h2 align="center">Cinema Page 🏢</h2>
 <p align="center">
-    <img src="./images/screenshot3.png" width="600">
+  <img src="./images/Login-screen.png" alt="Register and Login - screenshot 2" width="800">
 </p>
 
-<h2 align="center">View Schedule 🕙</h2>
+<h3 align="center">Theatres and Screens</h3>
+
 <p align="center">
-    <img src="./images/screenshot4.png" width="600">
+  <img src="./images/Theatres-screen-1.png" alt="Theatres and Screens - screenshot 1" width="800">
 </p>
 
-<h2 align="center">Book Seats 💺</h2>
 <p align="center">
-    <img src="./images/screenshot5.png" width="600">
+  <img src="./images/Theatres-screen-2.png" alt="Theatres and Screens - screenshot 2" width="800">
 </p>
 
-<h2 align="center">View Tickets 🎫</h2>
+<h3 align="center">Schedule</h3>
+
 <p align="center">
-    <img src="./images/screenshot6.png" width="600">
+  <img src="./images/schedule-page.png" alt="Schedule" width="800">
 </p>
 
-<h2 align="center">Add a Movie 🍿</h2>
+<h3 align="center">Seat Booking</h3>
+
 <p align="center">
-    <img src="./images/screenshot7.png" width="600">
+  <img src="./images/Seat-booking-screen-1.png" alt="Seat Booking - screenshot 1" width="800">
 </p>
 
-<h2 align="center">Search Showtimes 🔎</h2>
 <p align="center">
-    <img src="./images/search2.png" width="600">
+  <img src="./images/seat-booking-screen-2.png" alt="Seat Booking - screenshot 2" width="800">
 </p>
 
-<h2 align="center">Manage Users 🕵️</h2>
+<h3 align="center">Checkout</h3>
+
 <p align="center">
-    <img src="./images/user1.png" width="600">
+  <img src="./images/checkout-page.png" alt="Checkout" width="800">
 </p>
 
-## Guide
-
-### 🧩 Role / Feature
-
-There are 3 roles on this website with corresponding permissions:
-
-| Role  | Permisson / Feature |
-|-------------|-------------|
-|👀 Viewer (Not logged in)  | **1. View released showtimes by choosing from** <br> &emsp;- Movie in home page <br>  &emsp;- Cinema's theater in cinema page <br> &emsp;- Cinema's schedule in schedule page <br> **2. View released showtimes for today and the future** <br> **3. View seats for released showtimes on the showtime page**|
-|👤 User   | **1. All Viewer permissions** <br> **2. Purchase tickets on the showtime page** <br> **3. View purchased tickets on the ticket page**|
-|👑 Admin   | **1. All User permissions** <br> **2. View all showtimes for any date** <br> **3. Manage cinemas** <br> **4. Manage theaters** <br> &emsp;- View theater's row, column, seats information <br> **5. Manage showtimes** <br> &emsp;- Search & filter & sort showtimes <br> &emsp;- View details of booked seats <br> **6. Manage movies** <br> **7. Manage user & admin**|
-
-### 👀 Viewer
-Viewer have access to these pages for viewing released showtimes.
-
-<details>
-    <summary>Home page</summary><br>
-
-1. Select a movie
-
-<img src="./images/home_viewer1.png" width="600">
-
-2. Select a date by either typing it into the input or selecting from the calendar to view showtimes 
-
-<img src="./images/home_viewer2.png" width="600">
-
-3. Optionally, select a cinema to filter
-
-<img src="./images/home_viewer3.png" width="600">
-
-4. Click on a showtime to view seats
-
-<img src="./images/home_viewer4.png" width="600">
-
-</details>
-
-<details>
-    <summary>Cinema page</summary><br>
-
-1. Select a cinema
-
-<img src="./images/cinema_viewer1.png" width="600">
-
-2. Select a date to view its theaters and showtimes
-
-<img src="./images/cinema_viewer2.png" width="600">
-
-3. Click on a showtime to view seats
-
-</details>
-
-<details>
-    <summary>Schedule page</summary><br>
-
-1. Select a cinema
-
-<img src="./images/schedule_viewer1.png" width="600">
-
-2. Select a date to view its schedule for each theater
-
-<img src="./images/schedule_viewer2.png" width="600">
-
-3. Click on a showtime to view seats
-
-<img src="./images/schedule_viewer3.png" width="600">
-
-</details>
-
-<details>
-    <summary>Showtime page</summary><br>
-
-1. View available seats (white boxes) and unavailable seats (gray boxes)
-
-<img src="./images/showtime_viewer1.png" width="600">
-
-2. Viewer will be redirected to the login page if they click "Purchase"
-
-</details>
-
-### 👤 User
-User have all viewer permission. Including, the ability to purchase and view their own tickets
-
-<details>
-    <summary>Register / Login</summary><br>
-
-1. To create an user account, fill in a username, email, and password, then click "Register"
-
-<img src="./images/register1.png" width="600">
-
-2. To log in, fill in username and password, then click "Login"
-
-<img src="./images/login1.png" width="600">
-
-</details>
-
-<details>
-    <summary>Showtime page / Purchase tickets</summary><br>
-
-1. Select available seats 
-
-<img src="./images/showtime_user1.png" width="600">
-
-2. Click the "Purchase" button and confirm to purchase tickets
-
-<img src="./images/showtime_user2.png" width="600">
-
-</details>
-
-<details>
-    <summary>Ticket page</summary><br>
-
-1. View purchased tickets
-
-<img src="./images/ticket_user1.png" width="600">
-
-</details>
-
-### 👑 Admin
-Admin have all permission.
-
-<details>
-    <summary>Create an admin account</summary><br>
-
-1. Register a new user.
-2. Access MongoDB and locate the user's data.
-3. Update the user's role to `admin`.
-4. The user will now become admin.
-   
-Note: After obtaining the first admin account, this user can assign admin roles to others using the User page.
-
-</details>
-    
-<details>
-    <summary>Home page</summary><br>
-
-1. Admin can view theater's row, column, seats information.
-
-<img src="./images/home_admin1.png" width="600">
-
-2. Admin can view all showtimes for any date
-
-<img src="./images/home_admin2.png" width="600">
-
-</details>
-
-<details>
-    <summary>Cinema page</summary><br>
-
-<img src="./images/cinema_admin1.png" width="600"><br>
-
-**Add a new cinema**
-1. Type the cinema's name.
-
-<img src="./images/add_cinema1.png" width="600">
-
-2. Click the "Add" button
-
-<img src="./images/add_cinema2.png" width="600"><br>
-
-**Edit a cinema's name**
-1. Click the "Edit" button
-
-<img src="./images/edit_cinema1.png" width="600">
-
-2. Enter the new cinema name and click "Save"
-
-<img src="./images/edit_cinema2.png" width="600"><br>
-
-**Delete a cinema**
-1. Click the "Delete" button and confirm by clicking "OK"
-
-<img src="./images/delete_cinema1.png" width="600"><br>
-
-**Add a theater to the cinema**
-1. Fill the letter of the last row and the number of the last column seat, then click "Add"
-
-<img src="./images/add_theater1.png" width="600"><br>
-
-**Delete the last added theater**
-1. Click the "Delete" button at the bottom of the page
-
-<img src="./images/add_theater2.png" width="600"><br>
-
-**Add showtimes**
-1. Select a movie
-2. Fill in the following values:
-    * **Showtime:** Movie start time
-    * **Repeat:** For example, 1 means the showtime is added for today only, while 4  mean the showtime is added for today and the next 3 days.
-    * **Release now:** Check to release this showtime for viewers and users to view or book
-    
-    **Auto increase**
-    * **Showtime:** Check to automatically update the showtime value based on the ending time of this showtime, along with a specified gap. This is useful when adding consecutive movies, ensuring appropriate spacing between showtimes.
-    * **Date:** Check to enable automatic increase of showtime to the next day if it exceeds 24 hours
-    * **Gap:** The minimum duration between movie showtimes
-    
-    **Rounding**
-    * **5-min:** Round up the auto-increased showtime value to the nearest 5 minutes, e.g., 12:21 -> 12:25
-    * **10-min:** Round up the auto-increased showtime value to the nearest 10 minutes, e.g., 12:21 -> 12:30
-
-3.  Click the "Add" button
-
-<img src="./images/add_showtime1.png" width="600">
-
-4. The new showtimes will added to the theater. An eye-slash icon indicates that this showtime is not yet released
-
-<img src="./images/add_showtime2.png" width="600">
-
-</details>
-
-<details>
-    <summary>Schedule page</summary><br>
-
-<img src="./images/schedule_admin1.png" width="600">
-
-</details>
-
-
-<details>
-    <summary>Showtime page</summary><br>
-
-1. View details of booked seats
-2. Release, unrelease, or delete the showtime by clicking the button in the top-right corner
-
-<img src="./images/showtime_admin1.png" width="600">
-
-</details>
-
-<details>
-    <summary>Movie page</summary><br>
-
-<img src="./images/movie1.png" width="600"><br>
-
-**Add a movie**
-1. Fill in the movie name, URL of the poster, and the length in hours (optional) and minutes. Then, click "Add" to add the movie.
-
-<img src="./images/movie2.png" width="600"><br>
-
-**Delete a movie**
-
-1. Click the "Delete" button and confirm by clicking "OK"
-
-</details>
-
-<details>
-    <summary>Search page</summary><br>
-
-<img src="./images/search1.png" width="600">
-
-1. Filter & sort showtime and select to release / unreleased / delete them
-2. Click a "View" button to view seats
-
-<img src="./images/search2.png" width="600">
-
-</details>
-
-<details>
-    <summary>User page</summary><br>
-
-1. View usernames, email addresses, roles, and tickets of users.
-2. Click the "View Tickets" button to see a user's purchased tickets.
-3. Click the "Set Admin" or "Set User" button to change the user's role.
-4. Click the "Delete" button to delete the account.
-
-<img src="./images/user1.png" width="600">
-
-</details>
-
-## How to run the app
-1. Download the code
-2. Create .env file in /server
+<h3 align="center">My Tickets</h3>
+
+<p align="center">
+  <img src="./images/my-tickets-page.png" alt="My Tickets" width="800">
+</p>
+
+<h3 align="center">Manage Movies</h3>
+
+<p align="center">
+  <img src="./images/admin-create-movie.png" alt="Manage Movies - screenshot 1" width="800">
+</p>
+
+<p align="center">
+  <img src="./images/admin-create-movie-2.png" alt="Manage Movies - screenshot 2" width="800">
+</p>
+
+<h3 align="center">Manage Users</h3>
+
+<p align="center">
+  <img src="./images/admin-manage-users.png" alt="Manage Users" width="800">
+</p>
+
+## Technology
+
+| Area | Tools |
+| --- | --- |
+| Frontend | React, Vite, React Router, Tailwind CSS, React Hook Form, Axios |
+| Backend | Node.js, Express, Mongoose |
+| Database | MongoDB Atlas or a local MongoDB replica set |
+| Authentication | JWT, bcrypt, Google Identity Services, Google Auth Library |
+| Payments | Razorpay Checkout and server-side REST API calls |
+| Email | Nodemailer with SMTP |
+| Tests | Node.js test runner and MongoDB Memory Server |
+
+## Project structure
+
+```text
+client/
+  src/
+    components/   Shared UI and forms
+    context/      Authentication state
+    pages/        Application pages
+    utils/        Google and Razorpay script loaders
+server/
+  controllers/    HTTP request handlers
+  models/         MongoDB schemas
+  routes/         API routes
+  services/       Booking, payment, authentication, and email logic
+  tests/          Backend tests
+  .env.example    Backend configuration template
 ```
+
+## Local setup
+
+### 1. Prerequisites
+
+- Node.js with npm. The backend uses built-in `fetch` and the Node.js test runner.
+- MongoDB Atlas or a configured local replica set. Booking transactions do not work with a standalone MongoDB server.
+- Razorpay test credentials for checkout.
+- A Google Web client ID for Google sign-in and SMTP credentials for email delivery, if using those features.
+
+### 2. Configure the backend
+
+Copy `server/.env.example` to `server/.env` and replace the placeholders:
+
+```env
+DATABASE=your_mongodb_connection_string
 PORT=8080
-DATABASE=<your MongoDB connection string URI>
-JWT_SECRET=<any random JWT secret>
-JWT_EXPIRE=30d
-JWT_COOKIE_EXPIRE=30
+JWT_SECRET=replace_with_a_long_random_secret
+JWT_EXPIRE=7d
+JWT_COOKIE_EXPIRE=7
+
+RAZORPAY_KEY_ID=rzp_test_your_key
+RAZORPAY_KEY_SECRET=your_test_key_secret
+
+GOOGLE_CLIENT_ID=your_web_client_id.apps.googleusercontent.com
+
+SMTP_HOST=smtp.gmail.com
+SMTP_PORT=587
+SMTP_USER=youraccount@gmail.com
+SMTP_PASS=your_app_password
+MAIL_FROM="Movie Booking <youraccount@gmail.com>"
 ```
-3. Start server side
+
+Keep real credentials out of Git. Configure Atlas database credentials and network access for the machine running the backend.
+
+### 3. Configure the frontend
+
+Create `client/.env`:
+
+```env
+VITE_SERVER_URL=http://localhost:8080
+VITE_GOOGLE_CLIENT_ID=your_web_client_id.apps.googleusercontent.com
 ```
+
+The Google client ID must match the backend value. Frontend variables are public: never put SMTP passwords, Razorpay secrets, or a Google client secret here.
+
+### 4. Start the backend
+
+```sh
 cd server
 npm install
 npm start
 ```
-4. Start client side
-```
+
+Wait for `mongoose connected!` before using database-backed features. The server listening message alone does not confirm database connectivity.
+
+### 5. Start the frontend
+
+In another terminal:
+
+```sh
 cd client
 npm install
 npm run dev
 ```
+
+Open the URL printed by Vite, usually `http://localhost:5173`. Restart the relevant development server after changing environment variables.
+
+## First admin and initial data
+
+New password and Google registrations receive the `user` role.
+
+1. Register an account.
+2. In your development database's `users` collection, change that account's `role` to `admin`.
+3. Log out and log in again.
+4. Use the Movies page to add movies, then create a theatre and its screens.
+5. Add future showtimes, set ticket prices, and enable **Release now** so customers can book.
+
+An existing admin can assign admin access through the Users page. An admin-email environment allowlist and a separate super-admin role are not implemented.
+
+## Booking and payment flow
+
+1. Selecting seats and proceeding to checkout calls `POST /bookings` with an `Idempotency-Key` header.
+2. The backend validates seats and calculates the price from stored showtime data. A transaction creates the booking and its seat hold.
+3. Holds last up to five minutes, ending sooner if the show starts first.
+4. Checkout creates a Razorpay order through `POST /payments/order`.
+5. After payment, `POST /payments/verify` verifies the signature and checks the payment's order, amount, currency, and captured status.
+6. A valid payment with a valid reservation confirms the booking. The backend then attempts to send its confirmation email.
+
+Prices are stored as integer paise; administrators enter rupees in the UI.
+
+### Seat availability
+
+| Color | Meaning |
+| --- | --- |
+| White | Available |
+| Blue | Selected |
+| Orange | Temporarily held |
+| Black | Purchased |
+
+Held and purchased seats cannot be selected. **Refresh seats** fetches current availability; the seat map does not receive live updates.
+
+Expired holds stop blocking seats based on their timestamp. Booking detail/list requests also mark pending records expired and remove expired holds. Booking records are retained; they are not automatically deleted.
+
+**Cancel booking** releases an unconfirmed booking's holds immediately. Confirmed tickets cannot be cancelled through this feature.
+
+
+## Google sign-in
+
+Configure a Web application OAuth client in Google Cloud and authorize the frontend origin, including its port for local development.
+
+The frontend receives a Google ID token, and `POST /auth/google` verifies it before issuing the application's JWT. This flow uses the client ID, not a client secret.
+
+Google account names are used as usernames, with a numeric suffix when needed. Google-only users do not need a password. If an email already belongs to a password account, Google sign-in does not automatically merge the accounts; the user must use their existing login.
+
+## Confirmation emails
+
+Nodemailer sends booking details to the user's registered email using the configured SMTP account. For Gmail, use an app password from an account with 2-Step Verification enabled, not the normal account password.
+
+Emails contain the movie, theatre, screen, date/time in IST, seats, amount, and booking reference. Checkout displays email status. An email failure does not reverse a confirmed booking.
+
+The backend records sending/sent/failed status to prevent normal duplicate sends. There is no background email retry worker or guaranteed exactly-once delivery; a process interruption during sending may require manual follow-up.
+
+## Checks
+
+Run backend tests from the repository root:
+
+```sh
+npm test --prefix server
+```
+
+Tests use a temporary local MongoDB replica set and mock external payment, Google verification, and email calls. They do not send real emails or charge payments. MongoDB Memory Server may download its MongoDB binary on the first run.
+
+Build the frontend:
+
+```sh
+npm run build --prefix client
+```
+
+Preview the build:
+
+```sh
+npm run preview --prefix client
+```
+
