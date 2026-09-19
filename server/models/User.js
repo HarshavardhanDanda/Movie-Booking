@@ -17,6 +17,7 @@ const userSchema = new mongoose.Schema({
 			'Please add a valid email'
 		]
 	},
+	googleId: { type: String, unique: true, sparse: true, select: false },
 	role: {
 		type: String,
 		enum: ['user', 'admin'],
@@ -24,7 +25,7 @@ const userSchema = new mongoose.Schema({
 	},
 	password: {
 		type: String,
-		required: [true, 'Please add a password'],
+		required: [function () { return !this.googleId }, 'Please add a password'],
 		minlength: 6,
 		select: false
 	},
@@ -47,6 +48,7 @@ const userSchema = new mongoose.Schema({
 
 //Encrypt password using bcrypt
 userSchema.pre('save', async function (next) {
+	if (!this.isModified('password') || !this.password) return
 	const salt = await bcrypt.genSalt(10)
 	this.password = await bcrypt.hash(this.password, salt)
 })
@@ -60,6 +62,7 @@ userSchema.methods.getSignedJwtToken = function () {
 
 //Match user entered password to hashed password in database
 userSchema.methods.matchPassword = async function (enteredPassword) {
+	if (!this.password) return false
 	return await bcrypt.compare(enteredPassword, this.password)
 }
 

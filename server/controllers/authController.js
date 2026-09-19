@@ -1,6 +1,13 @@
+const { googleLogin } = require('../services/googleAuthService')
+const { endpoint } = require('../services/errors')
 const User = require('../models/User')
 const Booking = require('../models/Booking')
 const { pick } = require('../services/catalogService')
+
+exports.googleLogin = endpoint(async (req, res) => {
+	const user = await googleLogin(req.body.credential)
+	sendTokenResponse(user, 200, res)
+})
 
 //@desc    Register user
 //@route   POST /auth/register
@@ -70,7 +77,8 @@ const sendTokenResponse = (user, statusCode, res) => {
 	}
 	res.status(statusCode).cookie('token', token, options).json({
 		success: true,
-		token
+		token,
+		user: { username: user.username, email: user.email, role: user.role }
 	})
 }
 

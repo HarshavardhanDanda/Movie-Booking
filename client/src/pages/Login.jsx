@@ -1,3 +1,4 @@
+import GoogleSignIn from '../components/GoogleSignIn'
 import axios from 'axios'
 import React, { useContext, useState } from 'react'
 import { useForm } from 'react-hook-form'
@@ -85,13 +86,14 @@ const Login = () => {
 							{isLoggingIn ? 'Processing...' : 'Login'}
 						</button>
 					</div>
-					<p className="text-right">
+					<p className="text-center">
 						Don’t have an account?{' '}
 						<Link to={'/register'} className="font-bold text-[#31594b]">
 							Register here
 						</Link>
 					</p>
 				</form>
+				<GoogleSignIn />
 			</div>
 		</div>
 	)
