@@ -1,18 +1,20 @@
 const User = require('../models/User')
+const Booking = require('../models/Booking')
+const { pick } = require('../services/catalogService')
 
 //@desc    Register user
 //@route   POST /auth/register
 //@access  Public
 exports.register = async (req, res, next) => {
 	try {
-		const { username, email, password, role = 'user' } = req.body
+		const { username, email, password } = req.body
 
 		//Create user
 		const user = await User.create({
 			username,
 			email,
 			password,
-			role
+			role: 'user'
 		})
 
 		sendTokenResponse(user, 200, res)
@@ -92,6 +94,8 @@ exports.getMe = async (req, res, next) => {
 //@access	Private
 exports.getTickets = async (req, res, next) => {
 	try {
+		// Keep the old response shape until the checkout frontend is updated.
+		const bookings = await Booking.find({ user: req.user.id, status: 'confirmed' }).sort({ createdAt: -1 })
 		const user = await User.findById(req.user.id, { tickets: 1 }).populate({
 			path: 'tickets.showtime',
 			populate: [
@@ -103,7 +107,33 @@ exports.getTickets = async (req, res, next) => {
 
 		res.status(200).json({
 			success: true,
-			data: user
+			data: {
+				...user.toObject(),
+				tickets: [
+					...user.tickets,
+					...bookings.map((booking) => ({
+						_id: booking._id,
+						reference: booking.reference,
+						totalAmount: booking.totalAmount,
+						currency: booking.currency,
+						showtime: {
+							_id: booking.showtime,
+							showtime: booking.snapshot.startsAt,
+							isRelease: true,
+							movie: {
+								name: booking.snapshot.movieName,
+								length: booking.snapshot.movieLength,
+								img: booking.snapshot.movieImage
+							},
+							screen: {
+								number: booking.snapshot.screenNumber,
+								theatre: { name: booking.snapshot.theatreName }
+							}
+						},
+						seats: booking.seats.map((seat) => require('../services/bookingService').seatParts(seat))
+					}))
+				]
+			}
 		})
 	} catch (err) {
 		res.status(400).json({ success: false, message: err })
@@ -172,7 +202,11 @@ exports.deleteUser = async (req, res, next) => {
 //@access   Private
 exports.updateUser = async (req, res, next) => {
 	try {
-		const user = await User.findByIdAndUpdate(req.params.id, req.body, {
+		if (req.user.role !== 'admin' && req.user.id !== req.params.id)
+			return res.status(403).json({ success: false, message: 'You can only update your own account' })
+		// Never accept tickets or payment state from an account-edit request.
+		const fields = req.user.role === 'admin' ? ['username', 'email', 'role'] : ['username', 'email']
+		const user = await User.findByIdAndUpdate(req.params.id, pick(req.body, fields), {
 			new: true,
 			runValidators: true
 		})

@@ -5,6 +5,7 @@ import { useContext, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { toast } from 'react-toastify'
 import { AuthContext } from '../context/AuthContext'
+import ShowtimePrice from './ShowtimePrice'
 
 const ShowtimeDetails = ({ showDeleteBtn, showtime, fetchShowtime }) => {
 	const { auth } = useContext(AuthContext)
@@ -123,6 +124,7 @@ const ShowtimeDetails = ({ showDeleteBtn, showtime, fetchShowtime }) => {
 
 	return (
 		<>
+			{showDeleteBtn && auth.role === 'admin' && <ShowtimePrice key={showtime._id} showtime={showtime} onSaved={fetchShowtime} />}
 			{showDeleteBtn && auth.role === 'admin' && (
 				<div className="mb-4 flex justify-end gap-2">
 					{!showtime.isRelease && (

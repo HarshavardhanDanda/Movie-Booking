@@ -1,3 +1,4 @@
+import TicketPriceField from './TicketPriceField'
 import { ArrowsRightLeftIcon, ArrowsUpDownIcon, InformationCircleIcon, UserIcon } from '@heroicons/react/24/outline'
 import axios from 'axios'
 import { useContext, useEffect, useState } from 'react'
@@ -74,7 +75,7 @@ const Screen = ({ screenId, movies, selectedDate, filterMovie, setSelectedDate }
 			showtime.setHours(hours, minutes, 0)
 			const response = await axios.post(
 				'/showtime',
-				{ movie: data.movie, showtime, screen: screen._id, repeat: data.repeat, isRelease: data.isRelease },
+				{ movie: data.movie, showtime, screen: screen._id, repeat: Number(data.repeat), isRelease: data.isRelease, ticketPrice: Math.round(data.ticketPrice * 100) },
 				{
 					headers: {
 						Authorization: `Bearer ${auth.token}`
@@ -236,9 +237,10 @@ const Screen = ({ screenId, movies, selectedDate, filterMovie, setSelectedDate }
 											max={31}
 											className="h-9 w-full rounded bg-white px-2 py-1 font-semibold text-gray-900 drop-shadow-sm"
 											required
-											{...register('repeat', { required: true })}
+											{...register('repeat', { required: true, valueAsNumber: true })}
 										/>
 									</div>
+									<TicketPriceField register={register} />
 									<label className="flex items-center gap-x-2 gap-y-1 whitespace-nowrap text-lg font-semibold leading-5 lg:flex-col lg:items-start">
 										Release now:
 										<input

@@ -1,3 +1,5 @@
+const catalog = require('../services/catalogService')
+const { endpoint } = require('../services/errors')
 const Theatre = require('../models/Theatre')
 
 //@desc     GET all theatres
@@ -11,7 +13,7 @@ exports.getTheatres = async (req, res, next) => {
 				populate: {
 					path: 'showtimes',
 					populate: { path: 'movie', select: 'name length' },
-					select: 'movie showtime isRelease'
+					select: 'movie showtime isRelease ticketPrice currency'
 				},
 				select: 'number seatPlan showtimes'
 			})
@@ -43,7 +45,7 @@ exports.getUnreleasedTheatres = async (req, res, next) => {
 				populate: {
 					path: 'showtimes',
 					populate: { path: 'movie', select: 'name length' },
-					select: 'movie showtime isRelease'
+					select: 'movie showtime isRelease ticketPrice currency'
 				},
 				select: 'number seatPlan showtimes'
 			})
@@ -67,7 +69,7 @@ exports.getTheatre = async (req, res, next) => {
 				populate: {
 					path: 'showtimes',
 					populate: { path: 'movie', select: 'name length' },
-					select: 'movie showtime isRelease'
+					select: 'movie showtime isRelease ticketPrice currency'
 				},
 				select: 'number seatPlan showtimes'
 			})
@@ -95,7 +97,7 @@ exports.getTheatre = async (req, res, next) => {
 //@access   Private
 exports.createTheatre = async (req, res, next) => {
 	try {
-		const theatre = await Theatre.create(req.body)
+		const theatre = await Theatre.create(catalog.pick(req.body, ['name']))
 		res.status(201).json({
 			success: true,
 			data: theatre
@@ -110,7 +112,7 @@ exports.createTheatre = async (req, res, next) => {
 //@access   Private Admin
 exports.updateTheatre = async (req, res, next) => {
 	try {
-		const theatre = await Theatre.findByIdAndUpdate(req.params.id, req.body, {
+		const theatre = await Theatre.findByIdAndUpdate(req.params.id, catalog.pick(req.body, ['name']), {
 			new: true,
 			runValidators: true
 		})
@@ -127,19 +129,6 @@ exports.updateTheatre = async (req, res, next) => {
 //@desc     Delete single theatre
 //@route    DELETE /theatre/:id
 //@access   Private Admin
-exports.deleteTheatre = async (req, res, next) => {
-	try {
-		const theatre = await Theatre.findById(req.params.id)
-
-		if (!theatre) {
-			return res.status(400).json({ success: false, message: `Theatre not found with id of ${req.params.id}` })
-		}
-
-		await theatre.deleteOne()
-
-		res.status(200).json({ success: true })
-	} catch (err) {
-		console.log(err)
-		res.status(400).json({ success: false, message: err })
-	}
-}
+exports.deleteTheatre = endpoint(async (req, res) => {
+  res.json({ success: true, count: await catalog.remove('theatre', [req.params.id]) })
+})

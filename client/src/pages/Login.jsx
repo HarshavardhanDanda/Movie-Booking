@@ -1,13 +1,14 @@
 import axios from 'axios'
 import React, { useContext, useState } from 'react'
 import { useForm } from 'react-hook-form'
-import { Link, useNavigate } from 'react-router-dom'
+import { Link, useLocation, useNavigate } from 'react-router-dom'
 import { toast } from 'react-toastify'
 import 'react-toastify/dist/ReactToastify.css'
 import { AuthContext } from '../context/AuthContext'
 
 const Login = () => {
 	const navigate = useNavigate()
+	const location = useLocation()
 	const { auth, setAuth } = useContext(AuthContext)
 	const [errorsMessage, setErrorsMessage] = useState('')
 	const [isLoggingIn, SetLoggingIn] = useState(false)
@@ -29,7 +30,8 @@ const Login = () => {
 				pauseOnHover: false
 			})
 			setAuth((prev) => ({ ...prev, token: response.data.token }))
-			navigate('/')
+			const from = location.state?.from
+			navigate(typeof from === 'string' && /^\/(checkout|showtime)\/[a-f\d]{24}$/i.test(from) ? from : '/', { replace: true })
 		} catch (error) {
 			console.error(error.response.data)
 			setErrorsMessage(error.response.data)

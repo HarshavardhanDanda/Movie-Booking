@@ -1,7 +1,7 @@
 import { TicketIcon } from '@heroicons/react/24/solid'
 import axios from 'axios'
-import { Fragment, useContext, useEffect, useState } from 'react'
-import { Link, useParams } from 'react-router-dom'
+import { Fragment, useContext, useEffect, useRef, useState } from 'react'
+import { useNavigate, useParams } from 'react-router-dom'
 import Select from 'react-tailwindcss-select'
 import { toast } from 'react-toastify'
 import Loading from '../components/Loading'
@@ -9,15 +9,19 @@ import Navbar from '../components/Navbar'
 import Seat from '../components/Seat'
 import ShowtimeDetails from '../components/ShowtimeDetails'
 import { AuthContext } from '../context/AuthContext'
+import { money } from '../utils/razorpay'
 
 const Showtime = () => {
 	const { auth } = useContext(AuthContext)
 	const { id } = useParams()
+	const navigate = useNavigate()
+	const [creatingBooking, setCreatingBooking] = useState(false)
+	const bookingRequest = useRef(null)
 	const [showtime, setShowtime] = useState({})
 	const [selectedSeats, setSelectedSeats] = useState([])
 	const [filterRow, setFilterRow] = useState(null)
 	const [filterColumn, setFilterColumn] = useState(null)
-	const sortedSelectedSeat = selectedSeats.sort((a, b) => {
+	const sortedSelectedSeat = [...selectedSeats].sort((a, b) => {
 		const [rowA, numberA] = a.match(/([A-Za-z]+)(\d+)/).slice(1)
 		const [rowB, numberB] = b.match(/([A-Za-z]+)(\d+)/).slice(1)
 		if (rowA === rowB) {
@@ -52,7 +56,7 @@ const Showtime = () => {
 			setShowtime(response.data.data)
 		} catch (error) {
 			console.error(error)
-			toast.error(error.response.data.message || 'Error', {
+			toast.error(error.response?.data?.message || 'Unable to load showtime', {
 				position: 'top-center',
 				autoClose: 2000,
 				pauseOnHover: false
@@ -86,6 +90,23 @@ const Showtime = () => {
 	}
 
 	const isPast = new Date(showtime.showtime) < new Date()
+	const priced = Number.isSafeInteger(showtime.ticketPrice) && showtime.ticketPrice > 0
+	const startCheckout = async () => {
+		if (creatingBooking) return
+		if (!auth.token) return navigate('/login', { state: { from: `/showtime/${id}` } })
+		setCreatingBooking(true)
+		try {
+			const selection = JSON.stringify([id, [...selectedSeats].sort()])
+			// Reuse the key if a network error makes the customer retry this selection.
+			if (bookingRequest.current?.selection !== selection) bookingRequest.current = { selection, key: crypto.randomUUID() }
+			const response = await axios.post('/bookings', { showtime: id, seats: selectedSeats }, {
+				headers: { Authorization: `Bearer ${auth.token}`, 'Idempotency-Key': bookingRequest.current.key }
+			})
+			navigate(`/checkout/${response.data.data._id}`)
+		} catch (err) {
+			toast.error(err.response?.data?.message || 'Unable to start checkout. Please try again.')
+		} finally { setCreatingBooking(false) }
+	}
 	const filteredSeats = showtime?.seats?.filter((seat) => {
 		return (
 			(!filterRow || filterRow.map((row) => row.value).includes(seat.row)) &&
@@ -109,20 +130,18 @@ const Showtime = () => {
 								)}
 							</div>
 							{!!selectedSeats.length && (
-								<Link
-									to={auth.role ? `/purchase/${id}` : '/login'}
-									state={{
-										selectedSeats: sortedSelectedSeat,
-										showtime
-									}}
-									className="flex items-center justify-center gap-2 rounded-b-lg bg-gradient-to-br from-indigo-600 to-blue-500 px-4 py-1 font-semibold text-white hover:from-indigo-500 hover:to-blue-500 md:rounded-none md:rounded-br-lg"
+								<button
+									onClick={startCheckout}
+									disabled={creatingBooking || !priced || isPast || !showtime.isRelease || selectedSeats.length > 10}
+									className="flex items-center justify-center gap-2 rounded-b-lg bg-gradient-to-br from-indigo-600 to-blue-500 px-4 py-2 font-semibold text-white hover:from-indigo-500 hover:to-blue-500 disabled:opacity-50 md:rounded-none md:rounded-br-lg"
 								>
-									<p>Purchase</p>
+									<span>{creatingBooking ? 'Preparing checkout…' : 'Proceed to checkout'}</span>
 									<TicketIcon className="h-7 w-7 text-white" />
-								</Link>
+								</button>
 							)}
 						</div>
 
+						<p className="mt-3 text-sm text-indigo-950">{priced ? `${money(showtime.ticketPrice)} per ticket · Select up to 10 seats${selectedSeats.length ? ` · Total ${money(showtime.ticketPrice * selectedSeats.length)}` : ''}` : 'Booking will open once the ticket price is set.'}</p>
 						<div className="mx-auto mt-4 flex flex-col items-center rounded-lg bg-gradient-to-br from-indigo-100 to-white p-4 text-center drop-shadow-lg">
 							<div className="w-full rounded-lg bg-white">
 								<div className="bg-gradient-to-r from-indigo-800 to-blue-700 bg-clip-text text-xl font-bold text-transparent">
@@ -156,7 +175,7 @@ const Showtime = () => {
 																key={index}
 																seat={{ row: rowLetter, number: col }}
 																setSelectedSeats={setSelectedSeats}
-																selectable={!isPast}
+																selectable={!isPast && priced && showtime.isRelease && selectedSeats.length < 10 && !creatingBooking}
 																isAvailable={
 																	!showtime.seats.find(
 																		(seat) =>

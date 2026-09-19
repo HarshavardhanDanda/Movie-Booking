@@ -9,23 +9,21 @@ const xss = require('xss-clean')
 require('dotenv').config()
 const dns = require('node:dns');
 dns.setServers(['8.8.8.8', '1.1.1.1']);
-
 const auth = require('./routes/auth')
 const theatre = require('./routes/theatre')
 const screen = require('./routes/screen')
 const movie = require('./routes/movie')
 const showtime = require('./routes/showtime')
-
+const booking = require('./routes/booking')
+const payment = require('./routes/payment')
 mongoose.set('strictQuery', false)
 mongoose
-	.connect(process.env.DATABASE, { autoIndex: true })
-	.then(() => {
-		console.log('mongoose connected!')
-	})
-	.catch((err) => console.log(err))
-
+.connect(process.env.DATABASE, { autoIndex: true })
+.then(() => {
+console.log('mongoose connected!')
+})
+.catch((err) => console.log(err))
 const app = express()
-
 app.use(express.json())
 app.use(cookieParser())
 app.use(morgan('dev'))
@@ -34,13 +32,12 @@ app.use(cors({ origin: true, credentials: true }))
 app.use(mongoSanitize())
 app.use(helmet())
 app.use(xss())
-
 app.use('/auth', auth)
 app.use('/theatre', theatre)
 app.use('/screen', screen)
 app.use('/movie', movie)
 app.use('/showtime', showtime)
-
+app.use('/bookings', booking)
+app.use('/payments', payment)
 const port = process.env.PORT || 8080
-
-app.listen(port, () => console.log(`start server in port ${port}`))
+app.listen(port, () => console.log(`started server in port ${port}`))

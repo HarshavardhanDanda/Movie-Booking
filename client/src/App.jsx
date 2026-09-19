@@ -1,12 +1,12 @@
 import axios from 'axios'
-import { Route, Routes } from 'react-router'
+import { Navigate, Route, Routes } from 'react-router'
 import { ToastContainer } from 'react-toastify'
 import AdminRoute from './AdminRoute'
 import Theatre from './pages/Theatre'
 import Home from './pages/Home'
 import Login from './pages/Login'
 import Movie from './pages/Movie'
-import Purchase from './pages/Purchase'
+import Checkout from './pages/Checkout'
 import Register from './pages/Register'
 import Schedule from './pages/Schedule'
 import Search from './pages/Search'
@@ -43,7 +43,8 @@ function App() {
 					}
 				/>
 				<Route path="/showtime/:id" element={<Showtime />} />
-				<Route path="/purchase/:id" element={<Purchase />} />
+				<Route path="/checkout/:id" element={<Checkout />} />
+				<Route path="/purchase/:id" element={<Navigate to="/theatre" replace />} />
 				<Route path="/ticket" element={<Tickets />} />
 				<Route path="/schedule" element={<Schedule />} />
 				<Route

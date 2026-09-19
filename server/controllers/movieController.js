@@ -1,3 +1,5 @@
+const catalog = require('../services/catalogService')
+const { endpoint } = require('../services/errors')
 const Movie = require('../models/Movie')
 const Showtime = require('../models/Showtime')
 
@@ -121,7 +123,7 @@ exports.getMovie = async (req, res, next) => {
 //@access   Private
 exports.createMovie = async (req, res, next) => {
 	try {
-		const movie = await Movie.create(req.body)
+		const movie = await Movie.create(catalog.pick(req.body, ['name', 'length', 'img']))
 		res.status(201).json({
 			success: true,
 			data: movie
@@ -136,7 +138,7 @@ exports.createMovie = async (req, res, next) => {
 //@access   Private Admin
 exports.updateMovie = async (req, res, next) => {
 	try {
-		const movie = await Movie.findByIdAndUpdate(req.params.id, req.body, {
+		const movie = await Movie.findByIdAndUpdate(req.params.id, catalog.pick(req.body, ['name', 'length', 'img']), {
 			new: true,
 			runValidators: true
 		})
@@ -153,17 +155,6 @@ exports.updateMovie = async (req, res, next) => {
 //@desc     Delete single movies
 //@route    DELETE /movie/:id
 //@access   Private Admin
-exports.deleteMovie = async (req, res, next) => {
-	try {
-		const movie = await Movie.findById(req.params.id)
-
-		if (!movie) {
-			return res.status(400).json({ success: false, message: `Movie not found with id of ${req.params.id}` })
-		}
-
-		await movie.deleteOne()
-		res.status(200).json({ success: true })
-	} catch (err) {
-		res.status(400).json({ success: false, message: err })
-	}
-}
+exports.deleteMovie = endpoint(async (req, res) => {
+  res.json({ success: true, count: await catalog.remove('movie', [req.params.id]) })
+})

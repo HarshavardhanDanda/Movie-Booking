@@ -1,3 +1,5 @@
+const catalog = require('../services/catalogService')
+const { endpoint } = require('../services/errors')
 const Theatre = require('../models/Theatre')
 const Screen = require('../models/Screen')
 
@@ -8,7 +10,7 @@ exports.getScreens = async (req, res, next) => {
 	try {
 		const screens = await Screen.find()
 			.populate([
-				{ path: 'showtimes', select: 'movie showtime isRelease' },
+				{ path: 'showtimes', select: 'movie showtime isRelease ticketPrice currency' },
 				{ path: 'theatre', select: 'name' }
 			])
 			.then((screens) => {
@@ -31,7 +33,7 @@ exports.getScreen = async (req, res, next) => {
 	try {
 		const screen = await Screen.findById(req.params.id)
 			.populate([
-				{ path: 'showtimes', select: 'movie showtime isRelease' },
+				{ path: 'showtimes', select: 'movie showtime isRelease ticketPrice currency' },
 				{ path: 'theatre', select: 'name' }
 			])
 			.then((screen) => {
@@ -55,7 +57,7 @@ exports.getScreen = async (req, res, next) => {
 exports.getUnreleasedScreen = async (req, res, next) => {
 	try {
 		const screen = await Screen.findById(req.params.id).populate([
-			{ path: 'showtimes', select: 'movie showtime isRelease' },
+			{ path: 'showtimes', select: 'movie showtime isRelease ticketPrice currency' },
 			{ path: 'theatre', select: 'name' }
 		])
 
@@ -80,7 +82,7 @@ exports.getScreenByMovie = async (req, res, next) => {
 				{
 					path: 'showtimes',
 					populate: { path: 'movie', select: 'name _id' },
-					select: 'movie showtime isRelease'
+					select: 'movie showtime isRelease ticketPrice currency'
 				},
 				{ path: 'theatre', select: 'name' }
 			])
@@ -122,7 +124,7 @@ exports.getUnreleasedScreenByMovie = async (req, res, next) => {
 			{
 				path: 'showtimes',
 				populate: { path: 'movie', select: 'name _id' },
-				select: 'movie showtime isRelease'
+				select: 'movie showtime isRelease ticketPrice currency'
 			},
 			{ path: 'theatre', select: 'name' }
 		])
@@ -189,7 +191,7 @@ exports.createScreen = async (req, res, next) => {
 //@access   Private Admin
 exports.updateScreen = async (req, res, next) => {
 	try {
-		const screen = await Screen.findByIdAndUpdate(req.params.id, req.body, {
+		const screen = await Screen.findOneAndUpdate({ _id: req.params.id }, catalog.pick(req.body, ['number', 'seatPlan']), {
 			new: true,
 			runValidators: true
 		})
@@ -206,20 +208,6 @@ exports.updateScreen = async (req, res, next) => {
 //@desc     Delete single screens
 //@route    DELETE /screen/:id
 //@access   Private Admin
-exports.deleteScreen = async (req, res, next) => {
-	try {
-		const screen = await Screen.findById(req.params.id)
-
-		if (!screen) {
-			return res.status(400).json({ success: false, message: `Screen not found with id of ${req.params.id}` })
-		}
-
-		await screen.deleteOne()
-
-		await Theatre.updateMany({ screens: screen._id }, { $pull: { screens: screen._id } })
-
-		res.status(200).json({ success: true })
-	} catch (err) {
-		res.status(400).json({ success: false, message: err })
-	}
-}
+exports.deleteScreen = endpoint(async (req, res) => {
+  res.json({ success: true, count: await catalog.remove('screen', [req.params.id]) })
+})
